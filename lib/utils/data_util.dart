@@ -231,12 +231,12 @@ class DataUtil {
   }
 
   static List<double> _calcSma(List<double> x, int n) {
-    List<double> r = []..length = x.length;
+    List<double> r = [];
     for (var i = 0; i < x.length; i++) {
       if (i == 0) {
-        r[i] = (x[i]);
+        r.add((x[i]));
       } else {
-        r[i] = (1.0 * x[i] + (n - 1.0) * r[i - 1]) / n;
+        r.add((1.0 * x[i] + (n - 1.0) * r[i - 1]) / n);
       }
     }
     return r;
@@ -244,31 +244,46 @@ class DataUtil {
 
   static void _calcKDJ(List<KLineEntity> dataList,
       {List<int> cfg = const [9, 3, 3]}) {
-    List<double> rsv = []..length = dataList.length;
-    rsv[0] = 50.0;
-    for (var i = 0; i < dataList.length; i++) {
-      final double closePrice = dataList[i].close;
+    if (dataList.length < 1) {
+      return;
+    }
+
+    List<double> rsv = [];
+    // rsv[0] = 50.0;
+    rsv.add(50.0);
+    for (var i = 1; i < dataList.length; i++) {
+      // final double closePrice = dataList[i].close;
+      final entity = dataList[i];
       var startIndex = i + 1 + cfg[0];
       if (startIndex < 0) {
         startIndex = 0;
       }
-      double high = -double.maxFinite;
-      double low = double.maxFinite;
-      for (int index = startIndex; index <= i; index++) {
-        high = max(high, dataList[index].high);
-        low = min(low, dataList[index].low);
+      print("startIndex: $startIndex i:$i");
+      double high = dataList[i - 1].high;
+      double low = dataList[i - 1].low;
+      for (int j = startIndex; j < i; j++) {
+        final t = dataList[j];
+        if (t.low < low) {
+          low = t.low;
+        }
+        if (t.high > high) {
+          high = t.high;
+        }
       }
-      rsv[i] = (closePrice - low) * 100.0 / (high - low);
+      print("high:$high low:$low");
+      rsv.add((entity.close - low) * 100.0 / (high - low));
+      // final cur = entity.close;
+      // var rsv = (cur - low) * 100.0 / (high - low);
+
     }
+    print("rsv.length:${rsv.length} ${rsv}");
     List<double> k = _calcSma(rsv, cfg[1]);
     List<double> d = _calcSma(k, cfg[2]);
-    List<double> j = []..length = dataList.length;
     for (var i = 0; i < dataList.length; i++) {
       KLineEntity entity = dataList[i];
-      j[i] = 3.0 * k[i] - 2.0 * d[i];
-      entity.j = j[i];
       entity.k = k[i];
       entity.d = d[i];
+      entity.j = 3.0 * k[i] - 2.0 * d[i];
     }
   }
 
