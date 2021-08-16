@@ -62,6 +62,7 @@ class ChartColors {
   //交叉线
   static Color crossLineWidth = Color(0xFFFFFFFF).withOpacity(0.12);
   static Color crossLineHeight = Color(0xFFFFFFFF);
+  static Color crossTextColor = Color(0x00000000);
 }
 
 class ChartStyle {
