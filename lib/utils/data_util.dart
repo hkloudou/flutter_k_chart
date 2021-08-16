@@ -334,7 +334,7 @@ class DataUtil {
     if (dataList.length < 1) {
       return;
     }
-    print("cfg:$cfg");
+    // print("cfg:$cfg");
     List<double> rsv = List.filled(dataList.length, 0, growable: true);
     rsv[0] = 50.0;
     for (var i = 1; i < dataList.length; i++) {

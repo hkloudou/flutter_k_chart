@@ -27,8 +27,9 @@ class KChartWidget extends StatefulWidget {
     this.volState = VolState.VOL,
     this.secondaryState = SecondaryState.MACD,
     this.isLine = false,
+    Key? key,
     int fractionDigits = 2,
-  }) {
+  }) : super(key: key) {
     NumberUtil.fractionDigits = fractionDigits;
   }
 
@@ -96,10 +97,18 @@ class _KChartWidgetState extends State<KChartWidget>
     mWidth = MediaQuery.of(context).size.width;
   }
 
+  // @override
+  // void didUpdateWidget(KChartWidget oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (oldWidget.datas != widget.datas) mScrollX = mSelectX = 0.0;
+  // }
   @override
   void didUpdateWidget(KChartWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.datas != widget.datas) mScrollX = mSelectX = 0.0;
+    // if (oldWidget.datas != widget.datas) mScrollX = mSelectX = 0.0;
+    if (oldWidget.key != null &&
+        widget.key != null &&
+        oldWidget.key != widget.key) mScrollX = mSelectX = 0.0;
   }
 
   @override
