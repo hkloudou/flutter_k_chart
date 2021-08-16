@@ -247,9 +247,8 @@ class DataUtil {
     if (dataList.length < 1) {
       return;
     }
-
+    print("cfg:$cfg");
     List<double> rsv = [];
-    // rsv[0] = 50.0;
     rsv.add(50.0);
     for (var i = 1; i < dataList.length; i++) {
       // final double closePrice = dataList[i].close;
@@ -258,7 +257,6 @@ class DataUtil {
       if (startIndex < 0) {
         startIndex = 0;
       }
-      print("startIndex: $startIndex i:$i");
       double high = dataList[i - 1].high;
       double low = dataList[i - 1].low;
       for (int j = startIndex; j < i; j++) {
@@ -270,13 +268,8 @@ class DataUtil {
           high = t.high;
         }
       }
-      print("high:$high low:$low");
       rsv.add((entity.close - low) * 100.0 / (high - low));
-      // final cur = entity.close;
-      // var rsv = (cur - low) * 100.0 / (high - low);
-
     }
-    print("rsv.length:${rsv.length} ${rsv}");
     List<double> k = _calcSma(rsv, cfg[1]);
     List<double> d = _calcSma(k, cfg[2]);
     for (var i = 0; i < dataList.length; i++) {
