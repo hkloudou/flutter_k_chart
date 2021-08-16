@@ -6,25 +6,27 @@ class ChartColors {
   //背景颜色
   static const Color bgColor = Color(0xff0D141E);
   static const Color kLineColor = Color(0xff4C86CD);
-  static const Color gridColor = Color(0xff4c5c74);
+  static Color gridColor = Color(0xff4c5c74);
   static const List<Color> kLineShadowColor = [
     Color(0x554C86CD),
     Color(0x00000000)
   ]; //k线阴影渐变
-  static const Color ma5Color = Color(0xffC9B885);
-  static const Color ma10Color = Color(0xff6CB0A6);
-  static const Color ma30Color = Color(0xff9979C6);
-  static Color upColor = Color(0xff4DAA90);
-  static Color dnColor = Color(0xffC15466);
+  static Color ma5Color = Color(0xffC9B885);
+  static Color ma10Color = Color(0xff6CB0A6);
+  static Color ma30Color = Color(0xff9979C6);
+  static Color upColor = Color.fromRGBO(30, 191, 120, 1);
+  static Color dnColor = Color.fromRGBO(205, 51, 77, 1);
+  static Color volUpColor = Color.fromRGBO(30, 114, 81, 1);
+  static Color volDnColor = Color.fromRGBO(133, 49, 63, 1);
   static const Color volColor = Color(0xff4729AE);
 
   static const Color macdColor = Color(0xff4729AE);
   static const Color difColor = Color(0xffC9B885);
   static const Color deaColor = Color(0xff6CB0A6);
 
-  static const Color kColor = Color(0xffC9B885);
-  static const Color dColor = Color(0xff6CB0A6);
-  static const Color jColor = Color(0xff9979C6);
+  static Color kColor = Color(0xffC9B885);
+  static Color dColor = Color(0xff6CB0A6);
+  static Color jColor = Color(0xff9979C6);
   static const Color rsiColor = Color(0xffC9B885);
 
   static const Color yAxisTextColor = Color(0xff60738E); //右边y轴刻度
