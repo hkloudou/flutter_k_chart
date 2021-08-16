@@ -85,8 +85,8 @@ abstract class BaseChartPainter extends CustomPainter {
 
     canvas.save();
     canvas.scale(1, 1);
-    drawBg(canvas, size);
-    drawGrid(canvas);
+    // drawBg(canvas, size);
+    // drawGrid(canvas);
     if (datas.isNotEmpty) {
       drawChart(canvas, size);
       drawRightText(canvas);
