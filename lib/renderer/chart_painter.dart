@@ -91,8 +91,7 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawGrid(canvas) {
-    mMainRenderer.drawGrid(
-        canvas, ChartStyle.gridRows, ChartStyle.gridColumns);
+    mMainRenderer.drawGrid(canvas, ChartStyle.gridRows, ChartStyle.gridColumns);
     mVolRenderer?.drawGrid(canvas, ChartStyle.gridRows, ChartStyle.gridColumns);
     mSecondaryRenderer?.drawGrid(
         canvas, ChartStyle.gridRows, ChartStyle.gridColumns);
@@ -200,7 +199,8 @@ class ChartPainter extends BaseChartPainter {
       tp.paint(canvas, Offset(x + w1 + w2, y - textHeight / 2));
     }
 
-    TextPainter dateTp = getTextPainter(getDate(point.id!), color: Colors.white);
+    TextPainter dateTp =
+        getTextPainter(getDate(point.id!), color: Colors.white);
     textWidth = dateTp.width;
     r = textHeight / 2;
     x = translateXtoX(getX(index));
@@ -317,8 +317,9 @@ class ChartPainter extends BaseChartPainter {
         scaleX;
     double x = mWidth - max;
     if (!isLine) x += mPointWidth / 2;
-    var dashWidth = 10;
-    var dashSpace = 5;
+    var dashWidth = 4;
+    var dashSpace = 3;
+    const padding = 2;
     double startX = 0;
     final space = (dashSpace + dashWidth);
     if (tp.width < max) {
@@ -332,10 +333,8 @@ class ChartPainter extends BaseChartPainter {
       //画一闪一闪
       if (isLine) {
         startAnimation();
-        Gradient pointGradient = RadialGradient(colors: [
-          Colors.white.withOpacity(opacity),
-          Colors.transparent
-        ]);
+        Gradient pointGradient = RadialGradient(
+            colors: [Colors.white.withOpacity(opacity), Colors.transparent]);
         pointPaint.shader = pointGradient
             .createShader(Rect.fromCircle(center: Offset(x, y), radius: 14.0));
         canvas.drawCircle(Offset(x, y), 14.0, pointPaint);
@@ -344,12 +343,18 @@ class ChartPainter extends BaseChartPainter {
       } else {
         stopAnimation(); //停止一闪闪
       }
-      double left = mWidth - tp.width;
-      double top = y - tp.height / 2;
-      canvas.drawRect(
-          Rect.fromLTRB(left, top, left + tp.width, top + tp.height),
+
+      double left = mWidth - tp.width - padding * 2;
+      double top = y - tp.height / 2 - padding;
+      // double bottom = left + tp.width + padding * 2;
+      double right = left + tp.width + padding * 2;
+      double bottom = top + tp.height + padding * 2;
+      // double
+
+      canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
           realTimePaint..color = ChartColors.realTimeBgColor);
-      tp.paint(canvas, Offset(left, top));
+      Offset textOffset = Offset(left + padding, y - tp.height / 2);
+      tp.paint(canvas, textOffset);
     } else {
       stopAnimation(); //停止一闪闪
       startX = 0;
@@ -364,26 +369,28 @@ class ChartPainter extends BaseChartPainter {
         startX += space;
       }
 
-      const padding = 3.0;
+      //画价格背景
       const triangleHeight = 8.0; //三角高度
       const triangleWidth = 5.0; //三角宽度
-
       double left =
           mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
       double top = y - tp.height / 2 - padding;
       //加上三角形的宽以及padding
       double right = left + tp.width + padding * 2 + triangleWidth + padding;
       double bottom = top + tp.height + padding * 2;
-      double radius = (bottom - top) / 2;
+      // double radius = (bottom - top) / 2;
       //画椭圆背景
-      RRect rectBg1 =
-          RRect.fromLTRBR(left, top, right, bottom, Radius.circular(radius));
-      RRect rectBg2 = RRect.fromLTRBR(left - 1, top - 1, right + 1, bottom + 1,
-          Radius.circular(radius + 2));
-      canvas.drawRRect(
-          rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
-      canvas.drawRRect(
-          rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
+      // RRect rectBg1 =
+      //     RRect.fromLTRBR(left, top, right, bottom, Radius.circular(radius));
+      // RRect rectBg2 = RRect.fromLTRBR(left - 1, top - 1, right + 1, bottom + 1,
+      //     Radius.circular(radius + 2));
+      // canvas.drawRRect(
+      //     rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
+      // canvas.drawRRect(
+      //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
+      canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+          realTimePaint..color = ChartColors.realTimeBgColor);
+      //文字
       tp = getTextPainter(format(point.close),
           color: ChartColors.realTimeTextColor);
       Offset textOffset = Offset(left + padding, y - tp.height / 2);

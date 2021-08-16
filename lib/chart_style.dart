@@ -43,14 +43,14 @@ class ChartColors {
   static const Color markerBgColor = Color(0xff0D1722);
 
   //实时线颜色等
-  static const Color realTimeBgColor = Color(0xff0D1722);
-  static const Color rightRealTimeTextColor = Color(0xff4C86CD);
-  static const Color realTimeTextBorderColor = Color(0xffffffff);
-  static const Color realTimeTextColor = Color(0xffffffff);
+  static Color realTimeBgColor = Color(0xff0D1722);
+  static Color rightRealTimeTextColor = Color(0xff4C86CD);
+  static Color realTimeTextBorderColor = Color(0xffffffff);
+  static Color realTimeTextColor = Color(0xffffffff);
 
   //实时线
-  static const Color realTimeLineColor = Color(0xffffffff);
-  static const Color realTimeLongLineColor = Color(0xff4C86CD);
+  static Color realTimeLineColor = Color(0xffffffff);
+  static Color realTimeLongLineColor = Color(0xff4C86CD);
 
   static const Color simpleLineUpColor = Color(0xff6CB0A6);
   static const Color simpleLineDnColor = Color(0xffC15466);

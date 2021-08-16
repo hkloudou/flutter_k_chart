@@ -90,11 +90,11 @@ abstract class BaseChartPainter extends CustomPainter {
     if (datas.isNotEmpty) {
       drawChart(canvas, size);
       drawRightText(canvas);
-      drawRealTimePrice(canvas, size);
       drawDate(canvas, size);
+      drawMaxAndMin(canvas);
+      drawRealTimePrice(canvas, size);
       if (isLongPress == true) drawCrossLineText(canvas, size);
       drawText(canvas, datas.last, 5);
-      drawMaxAndMin(canvas);
     }
     canvas.restore();
   }
