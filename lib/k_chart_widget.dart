@@ -122,7 +122,7 @@ class _KChartWidgetState extends State<KChartWidget>
         isDrag = true;
       },
       onHorizontalDragUpdate: (details) {
-        if (isScale || isLongPress || details.primaryDelta == null) return;
+        if (isScale /*|| isLongPress*/ || details.primaryDelta == null) return;
         mScrollX = (details.primaryDelta! / mScaleX + mScrollX)
             .clamp(0.0, ChartPainter.maxScrollX)
             .toDouble();
@@ -177,6 +177,46 @@ class _KChartWidgetState extends State<KChartWidget>
         // mInfoWindowStream.add(null);
         // notifyChanged();
       },
+      // onTap: () {
+      //   // isLongPress = !isLongPress;
+      //   if (isLongPress) {
+      //     isLongPress = false;
+      //     mInfoWindowStream.add(null);
+      //   }
+      //   // else {
+      //   //   isLongPress = true;
+      //   // }
+      //   notifyChanged();
+      // },
+      // onTapDown: (details) {
+      //   print("onTapDown");
+      //   if (isLongPress) {
+      //     isLongPress = false;
+      //     mInfoWindowStream.add(null);
+      //   }
+      //   notifyChanged();
+      // },
+      // onTapCancel: () {
+      //   print("onTapCancel");
+      //   if (isLongPress) {
+      //     isLongPress = false;
+      //     mInfoWindowStream.add(null);
+      //   }
+      //   notifyChanged();
+      // },
+      onTap: () {
+        if (isLongPress) {
+          isLongPress = false;
+          mInfoWindowStream.add(null);
+        }
+        notifyChanged();
+      },
+      // onTapUp: (detail) {
+      //   print("onTapUp ;${detail.globalPosition}");
+      // },
+      // onForcePressStart: (details) {
+      //   print("onForcePressStart: ${details.globalPosition}");
+      // },
       child: Stack(
         children: <Widget>[
           CustomPaint(
