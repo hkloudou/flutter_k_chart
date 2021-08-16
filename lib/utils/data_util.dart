@@ -231,12 +231,12 @@ class DataUtil {
   }
 
   static List<double> _calcSma(List<double> x, int n) {
-    List<double> r = [];
+    List<double> r = List.filled(x.length, 0, growable: true);
     for (var i = 0; i < x.length; i++) {
       if (i == 0) {
-        r.add((x[i]));
+        r[i] = x[i];
       } else {
-        r.add((1.0 * x[i] + (n - 1.0) * r[i - 1]) / n);
+        r[i] = (1.0 * x[i] + (n - 1.0) * r[i - 1]) / n;
       }
     }
     return r;
@@ -251,7 +251,6 @@ class DataUtil {
     List<double> rsv = [];
     rsv.add(50.0);
     for (var i = 1; i < dataList.length; i++) {
-      // final double closePrice = dataList[i].close;
       final entity = dataList[i];
       var startIndex = i + 1 + cfg[0];
       if (startIndex < 0) {
