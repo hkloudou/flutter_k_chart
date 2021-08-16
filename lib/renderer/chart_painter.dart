@@ -276,7 +276,7 @@ class ChartPainter extends BaseChartPainter {
     KLineEntity point = getItem(index);
     Paint paintY = Paint()
       ..color = ChartColors.crossLineWidth
-      ..strokeWidth = ChartStyle.vCrossWidth
+      ..strokeWidth = 0.5 //ChartStyle.vCrossWidth
       ..isAntiAlias = true;
     double x = getX(index);
     double y = getMainY(point.close);
