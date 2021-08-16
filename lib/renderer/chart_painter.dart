@@ -274,7 +274,7 @@ class ChartPainter extends BaseChartPainter {
     var index = calculateSelectedX(selectX);
     KLineEntity point = getItem(index);
     Paint paintY = Paint()
-      ..color = Colors.white12
+      ..color = ChartColors.crossLineWidth
       ..strokeWidth = ChartStyle.vCrossWidth
       ..isAntiAlias = true;
     double x = getX(index);
@@ -284,7 +284,7 @@ class ChartPainter extends BaseChartPainter {
         Offset(x, size.height - ChartStyle.bottomDateHigh), paintY);
 
     Paint paintX = Paint()
-      ..color = Colors.white
+      ..color = ChartColors.crossLineHeight
       ..strokeWidth = ChartStyle.hCrossWidth
       ..isAntiAlias = true;
     // k线图横线

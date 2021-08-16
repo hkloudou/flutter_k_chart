@@ -34,6 +34,9 @@ class _DepthChartState extends State<DepthChart> {
         if (isLongPress) {
           isLongPress = false;
           setState(() {});
+        } else {
+          isLongPress = true;
+          setState(() {});
         }
       },
       child: CustomPaint(

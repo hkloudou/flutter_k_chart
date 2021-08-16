@@ -173,9 +173,9 @@ class _KChartWidgetState extends State<KChartWidget>
         }
       },
       onLongPressEnd: (details) {
-        isLongPress = false;
-        mInfoWindowStream.add(null);
-        notifyChanged();
+        // isLongPress = false;
+        // mInfoWindowStream.add(null);
+        // notifyChanged();
       },
       child: Stack(
         children: <Widget>[
@@ -265,13 +265,13 @@ class _KChartWidgetState extends State<KChartWidget>
   }
 
   Widget _buildItem(String info, String infoName) {
-    Color color = Colors.white;
+    Color color = ChartColors.markerTextColor;
     if (info.startsWith("+"))
       color = Colors.green;
     else if (info.startsWith("-"))
       color = Colors.red;
     else
-      color = Colors.white;
+      color = ChartColors.markerTextColor;
     return Container(
       constraints: const BoxConstraints(
           minWidth: 95, maxWidth: 110, maxHeight: 14.0, minHeight: 14.0),
@@ -282,7 +282,8 @@ class _KChartWidgetState extends State<KChartWidget>
         children: <Widget>[
           Text("$infoName",
               style: TextStyle(
-                  color: Colors.white, fontSize: ChartStyle.defaultTextSize)),
+                  color: ChartColors.markerTextColor,
+                  fontSize: ChartStyle.defaultTextSize)),
           SizedBox(width: 5),
           Text(info,
               style: TextStyle(
