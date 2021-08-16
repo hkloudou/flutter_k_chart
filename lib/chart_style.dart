@@ -29,8 +29,8 @@ class ChartColors {
   static Color jColor = Color(0xff9979C6);
   static const Color rsiColor = Color(0xffC9B885);
 
-  static const Color yAxisTextColor = Color(0xff60738E); //右边y轴刻度
-  static const Color xAxisTextColor = Color(0xff60738E); //下方时间刻度
+  static Color yAxisTextColor = Color(0xff60738E); //右边y轴刻度
+  static Color xAxisTextColor = Color(0xff60738E); //下方时间刻度
 
   static const Color maxMinTextColor = Color(0xffffffff); //最大最小值的颜色
 
