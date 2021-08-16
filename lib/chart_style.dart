@@ -7,12 +7,15 @@ class ChartColors {
   static const Color bgColor = Color(0xff0D141E);
   static const Color kLineColor = Color(0xff4C86CD);
   static const Color gridColor = Color(0xff4c5c74);
-  static const List<Color> kLineShadowColor = [Color(0x554C86CD), Color(0x00000000)]; //k线阴影渐变
+  static const List<Color> kLineShadowColor = [
+    Color(0x554C86CD),
+    Color(0x00000000)
+  ]; //k线阴影渐变
   static const Color ma5Color = Color(0xffC9B885);
   static const Color ma10Color = Color(0xff6CB0A6);
   static const Color ma30Color = Color(0xff9979C6);
-  static const Color upColor = Color(0xff4DAA90);
-  static const Color dnColor = Color(0xffC15466);
+  static Color upColor = Color(0xff4DAA90);
+  static Color dnColor = Color(0xffC15466);
   static const Color volColor = Color(0xff4729AE);
 
   static const Color macdColor = Color(0xff4729AE);
@@ -51,8 +54,6 @@ class ChartColors {
 
   static const Color simpleLineUpColor = Color(0xff6CB0A6);
   static const Color simpleLineDnColor = Color(0xffC15466);
-
-
 }
 
 class ChartStyle {
@@ -82,7 +83,9 @@ class ChartStyle {
   //网格
   static const int gridRows = 3, gridColumns = 4;
 
-  static const double topPadding = 30.0, bottomDateHigh = 20.0, childPadding = 25.0;
+  static const double topPadding = 30.0,
+      bottomDateHigh = 20.0,
+      childPadding = 25.0;
 
   static const double defaultTextSize = 10.0;
 }
