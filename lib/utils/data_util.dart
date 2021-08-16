@@ -236,11 +236,98 @@ class DataUtil {
       if (i == 0) {
         r[i] = x[i];
       } else {
-        r[i] = (1.0 * x[i] + (n - 1.0) * r[i - 1]) / n;
+        r[i] = (x[i] + (n - 1.0) * r[i - 1]) / n;
       }
     }
     return r;
   }
+
+  // static void _calcKDJ(List<KLineEntity> dataList, [bool isLast = false]) {
+  //   double k = 0;
+  //   double d = 0;
+
+  //   int i = 0;
+  //   if (isLast && dataList.length > 1) {
+  //     i = dataList.length - 1;
+  //     var data = dataList[dataList.length - 2];
+  //     k = data.k!;
+  //     d = data.d!;
+  //   }
+
+  //   for (; i < dataList.length; i++) {
+  //     KLineEntity entity = dataList[i];
+  //     final double closePrice = entity.close;
+  //     int startIndex = i - 13;
+  //     if (startIndex < 0) {
+  //       startIndex = 0;
+  //     }
+  //     double max14 = -double.maxFinite;
+  //     double min14 = double.maxFinite;
+  //     for (int index = startIndex; index <= i; index++) {
+  //       max14 = max(max14, dataList[index].high);
+  //       min14 = min(min14, dataList[index].low);
+  //     }
+  //     double rsv = 100 * (closePrice - min14) / (max14 - min14);
+  //     if (rsv.isNaN) {
+  //       rsv = 0;
+  //     }
+  //     if (i == 0) {
+  //       k = 50;
+  //       d = 50;
+  //     } else {
+  //       k = (rsv + 2 * k) / 3;
+  //       d = (k + 2 * d) / 3;
+  //     }
+  //     if (i < 13) {
+  //       entity.k = 0;
+  //       entity.d = 0;
+  //       entity.j = 0;
+  //     } else if (i == 13 || i == 14) {
+  //       entity.k = k;
+  //       entity.d = 0;
+  //       entity.j = 0;
+  //     } else {
+  //       entity.k = k;
+  //       entity.d = d;
+  //       entity.j = 3 * k - 2 * d;
+  //     }
+  //   }
+  // }
+
+  // static void _calcKDJ(List<KLineEntity> dataList, [bool isLast = false]) {
+  //   var preK = 50.0;
+  //   var preD = 50.0;
+  //   final tmp = dataList.first;
+  //   tmp.k = preK;
+  //   tmp.d = preD;
+  //   tmp.j = 50.0;
+  //   for (int i = 1; i < dataList.length; i++) {
+  //     final entity = dataList[i];
+  //     final n = max(0, i - 13);
+  //     var low = entity.low;
+  //     var high = entity.high;
+  //     for (int j = n; j < i; j++) {
+  //       final t = dataList[j];
+  //       if (t.low < low) {
+  //         low = t.low;
+  //       }
+  //       if (t.high > high) {
+  //         high = t.high;
+  //       }
+  //     }
+  //     final cur = entity.close;
+  //     var rsv = (cur - low) * 100.0 / (high - low);
+  //     rsv = rsv.isNaN ? 0 : rsv;
+  //     final k = (2 * preK + rsv) / 3.0;
+  //     final d = (2 * preD + k) / 3.0;
+  //     final j = 3 * k - 2 * d;
+  //     preK = k;
+  //     preD = d;
+  //     entity.k = k;
+  //     entity.d = d;
+  //     entity.j = j;
+  //   }
+  // }
 
   static void _calcKDJ(List<KLineEntity> dataList,
       {List<int> cfg = const [9, 3, 3]}) {
@@ -248,8 +335,8 @@ class DataUtil {
       return;
     }
     print("cfg:$cfg");
-    List<double> rsv = [];
-    rsv.add(50.0);
+    List<double> rsv = List.filled(dataList.length, 0, growable: true);
+    rsv[0] = 50.0;
     for (var i = 1; i < dataList.length; i++) {
       final entity = dataList[i];
       var startIndex = i + 1 + cfg[0];
@@ -267,7 +354,7 @@ class DataUtil {
           high = t.high;
         }
       }
-      rsv.add((entity.close - low) * 100.0 / (high - low));
+      rsv[i] = (entity.close - low) * 100.0 / (high - low);
     }
     List<double> k = _calcSma(rsv, cfg[1]);
     List<double> d = _calcSma(k, cfg[2]);
