@@ -313,56 +313,80 @@ class ChartPainter extends BaseChartPainter {
     KLineEntity point = datas.last;
 
     //实时订单
-    var ups = orders.where((order) => point.close >= order.price).toList();
-    var dns = orders.where((order) => point.close < order.price).toList();
-    dns.sort((a, b) => (b.price - a.price).toInt());
-    ups.sort((a, b) => (a.price - b.price).toInt());
-
-    orders.forEach((order) {});
+    var ups =
+        orders.where((order) => order.price > mMainMaxValue).toList(); //上边界的
+    var dns =
+        orders.where((order) => order.price < mMainMinValue).toList(); //下边界
+    var nms = orders
+        .where((order) =>
+            order.price >= mMainMinValue && order.price <= mMainMaxValue)
+        .toList();
+    dns.sort((a, b) => (a.price - b.price).toInt());
+    ups.sort((a, b) => (b.price - a.price).toInt());
+    nms.sort((a, b) => (a.price - b.price).toInt());
+    var baseTop = getMainY(mMainMaxValue);
+    var baseBottom = getMainY(mMainMinValue);
+    print("baseTop:$baseTop");
+    const _height = 17;
+    for (var i = 0; i < ups.length; i++) {
+      drawOrdersLine(canvas, size, ups[i], baseTop + (i * _height));
+    }
+    for (var i = 0; i < dns.length; i++) {
+      drawOrdersLine(canvas, size, dns[i], baseBottom - i * _height);
+    }
+    List<double> ys = [];
+    for (var i = 0; i < nms.length; i++) {
+      var _yy = getMainY(nms[i].price);
+      ys.add(_yy);
+      
+      drawOrdersLine(canvas, size, nms[i], getMainY(nms[i].price));
+    }
+    // orders.forEach((order) {});
     // var yRealLine = yLine;
-    var posUp = 0;
-    var posDn = 0;
+    // var posUp = 0;
+    // var posDn = 0;
 
-    ups.forEach((order) {
-      double yLine = getMainY(order.price);
-      if (order.price > mMainMaxValue) {
-        yLine = getMainY(mMainMaxValue);
-      } else if (order.price < mMainMinValue) {
-        yLine = getMainY(mMainMinValue);
-      }
-      drawOrdersLine(canvas, size, order, yLine);
-      // if (order.price > mMainMaxValue) {
-      //   yLine = getMainY(mMainMaxValue);
-      //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
-      //   posUp--;
-      // } else if (order.price < mMainMinValue) {
-      //   yLine = getMainY(mMainMinValue);
-      //   posDn++;
-      //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
-      // } else {
-      //   drawOrdersLine(canvas, size, order, yLine);
-      // }
-    });
-    dns.forEach((order) {
-      double yLine = getMainY(order.price);
-      if (order.price > mMainMaxValue) {
-        yLine = getMainY(mMainMaxValue);
-      } else if (order.price < mMainMinValue) {
-        yLine = getMainY(mMainMinValue);
-      }
-      drawOrdersLine(canvas, size, order, yLine);
-      // if (order.price > mMainMaxValue) {
-      //   yLine = getMainY(mMainMaxValue);
-      //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
-      //   posUp--;
-      // } else if (order.price < mMainMinValue) {
-      //   yLine = getMainY(mMainMinValue);
-      //   posDn++;
-      //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
-      // } else {
-      //   drawOrdersLine(canvas, size, order, yLine);
-      // }
-    });
+    // ups.forEach((order) {
+    //   double yLine = getMainY(order.price);
+    //   if (order.price > mMainMaxValue) {
+    //     yLine = getMainY(mMainMaxValue);
+    //   } else if (order.price < mMainMinValue) {
+    //     yLine = getMainY(mMainMinValue);
+    //   }
+    //   drawOrdersLine(canvas, size, order, yLine);
+    //   // if (order.price > mMainMaxValue) {
+    //   //   yLine = getMainY(mMainMaxValue);
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
+    //   //   posUp--;
+    //   // } else if (order.price < mMainMinValue) {
+    //   //   yLine = getMainY(mMainMinValue);
+    //   //   posDn++;
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
+    //   // } else {
+    //   //   drawOrdersLine(canvas, size, order, yLine);
+    //   // }
+    // });
+    // dns.forEach((order) {
+    //   double yLine = getMainY(order.price);
+    //   if (order.price > mMainMaxValue) {
+    //     yLine = getMainY(mMainMaxValue);
+    //   } else if (order.price < mMainMinValue) {
+    //     yLine = getMainY(mMainMinValue);
+    //   }
+    //   drawOrdersLine(canvas, size, order, yLine);
+    //   // if (order.price > mMainMaxValue) {
+    //   //   yLine = getMainY(mMainMaxValue);
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
+    //   //   posUp--;
+    //   // } else if (order.price < mMainMinValue) {
+    //   //   yLine = getMainY(mMainMinValue);
+    //   //   posDn++;
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
+    //   // } else {
+    //   //   drawOrdersLine(canvas, size, order, yLine);
+    //   // }
+    // });
+
     // double yLine = getMainY(point.close);
     // if (point.close > mMainMaxValue) {
     //   yLine = getMainY(mMainMaxValue);
