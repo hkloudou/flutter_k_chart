@@ -453,6 +453,7 @@ class ChartPainter extends BaseChartPainter {
     var _max = 0.0;
     for (var i = 0; i < nms.length; i++) {
       var _yy = getMainY(nms[i].price);
+      print("nms[i].price:${nms[i].price},yy:$_yy");
       if (ys.isEmpty) {
         _min = _yy;
         _max = _yy;
