@@ -425,6 +425,8 @@ class ChartPainter extends BaseChartPainter {
     TextPainter tp = getTextPainter(format(price),
         color: ChartColors.rightRealTimeTextColor);
     double y = getMainY(price);
+    var _color =
+        point.close > price ? ChartColors.upColor : ChartColors.dnColor;
     var dashWidth = 4;
     var dashSpace = 1;
     const padding = 2;
@@ -440,13 +442,12 @@ class ChartPainter extends BaseChartPainter {
     }
     while (startX < mWidth) {
       canvas.drawLine(
-          Offset(startX, y),
-          Offset(startX + dashWidth, y),
-          realTimePaint
-            ..strokeWidth = 2
-            ..color = (point.close > price
-                ? ChartColors.upColor
-                : ChartColors.dnColor));
+        Offset(startX, y),
+        Offset(startX + dashWidth, y),
+        realTimePaint
+          ..strokeWidth = 2
+          ..color = _color,
+      );
       startX += space;
     }
 
@@ -469,10 +470,10 @@ class ChartPainter extends BaseChartPainter {
     //     rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
     // canvas.drawRRect(
     //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
-    canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
-        realTimePaint..color = ChartColors.realTimeBgColor);
+    canvas.drawRect(
+        Rect.fromLTRB(left, top, right, bottom), realTimePaint..color = _color);
     //文字
-    tp = getTextPainter(format(price), color: ChartColors.realTimeTextColor);
+    tp = getTextPainter(format(price), color: Colors.white);
     Offset textOffset = Offset(left + padding, y - tp.height / 2);
     tp.paint(canvas, textOffset);
     //画三角
@@ -486,7 +487,7 @@ class ChartPainter extends BaseChartPainter {
     canvas.drawPath(
         path,
         realTimePaint
-          ..color = ChartColors.realTimeTextColor
+          ..color = Colors.white
           ..shader = null);
   }
 
