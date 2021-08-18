@@ -313,47 +313,47 @@ class ChartPainter extends BaseChartPainter {
     KLineEntity point = datas.last;
 
     //实时订单
-    // var ups = orders.where((order) => point.close >= order.price).toList();
-    // var dns = orders.where((order) => point.close < order.price).toList();
-    // dns.sort((a, b) => (b.price - a.price).toInt());
-    // ups.sort((a, b) => (a.price - b.price).toInt());
-    double yLine = getMainY(point.close);
+    var ups = orders.where((order) => point.close >= order.price).toList();
+    var dns = orders.where((order) => point.close < order.price).toList();
+    dns.sort((a, b) => (b.price - a.price).toInt());
+    ups.sort((a, b) => (a.price - b.price).toInt());
+    // double yLine = getMainY(point.close);
     // if (point.close > mMainMaxValue) {
     //   yLine = getMainY(mMainMaxValue);
     // } else if (point.close < mMainMinValue) {
     //   yLine = getMainY(mMainMinValue);
     // }
-    var posMinTop = getMainY(mMainMaxValue); //顶部位置
-    var posMaxbottom = getMainY(mMainMinValue); //底部位置
+    // var posMinTop = getMainY(mMainMaxValue); //顶部位置
+    // var posMaxbottom = getMainY(mMainMinValue); //底部位置
 
-    var posTop = posMinTop; //顶部位置
-    var posBottom = posMaxbottom; //底部位置
+    // var posTop = posMinTop; //顶部位置
+    // var posBottom = posMaxbottom; //底部位置
 
-    orders.forEach((order) {
-      var yRealLine = yLine;
-      print("yRealLine:$yRealLine posTop:$posTop posBottom:$posBottom");
-      if (point.close > mMainMaxValue) {
-        //超出顶部
-        yRealLine = posTop;
-        posTop = posTop + 16; //顶部下移
-      } else if (point.close < mMainMinValue) {
-        yRealLine = posBottom;
-        posBottom = posBottom - 16; //底部下移
-      }
+    // orders.forEach((order) {
+    //   var yRealLine = yLine;
+    //   print("yRealLine:$yRealLine posTop:$posTop posBottom:$posBottom");
+    //   if (point.close > mMainMaxValue) {
+    //     //超出顶部
+    //     yRealLine = posTop;
+    //     posTop = posTop + 16; //顶部下移
+    //   } else if (point.close < mMainMinValue) {
+    //     yRealLine = posBottom;
+    //     posBottom = posBottom - 16; //底部下移
+    //   }
 
-      if (posTop > posMaxbottom) {
-        posTop = posMaxbottom;
-      } else if (posBottom < posMinTop) {
-        posBottom = posMinTop;
-      }
-      // yRealLine = yRealLine.clamp(posTop, posBottom);
-      // print("posMinTop:$posMinTop posMaxbottom:$posMaxbottom");
-      // print("yLine: $yLine mMainMaxValue:$mMainMaxValue mMainMinValue:$mMainMinValue");
-      print("yRealLine:$yRealLine posTop:$posTop posMinTop:$posMinTop");
-      // print(
-      //     "yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop \n posMaxbottom:$posMaxbottom \n posTop:$posTop \n posBottom:$posBottom");
-      drawOrdersLine(canvas, size, order, yRealLine);
-    });
+    //   if (posTop > posMaxbottom) {
+    //     posTop = posMaxbottom;
+    //   } else if (posBottom < posMinTop) {
+    //     posBottom = posMinTop;
+    //   }
+    //   // yRealLine = yRealLine.clamp(posTop, posBottom);
+    //   // print("posMinTop:$posMinTop posMaxbottom:$posMaxbottom");
+    //   // print("yLine: $yLine mMainMaxValue:$mMainMaxValue mMainMinValue:$mMainMinValue");
+    //   print("yRealLine:$yRealLine posTop:$posTop posMinTop:$posMinTop");
+    //   // print(
+    //   //     "yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop \n posMaxbottom:$posMaxbottom \n posTop:$posTop \n posBottom:$posBottom");
+    //   drawOrdersLine(canvas, size, order, yRealLine);
+    // });
     //实时价格线
     double y = getMainY(point.close);
     TextPainter tp = getTextPainter(format(point.close),
