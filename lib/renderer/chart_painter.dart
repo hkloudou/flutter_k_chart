@@ -456,19 +456,19 @@ class ChartPainter extends BaseChartPainter {
       var _price = nms[i].price;
       var _offY = getMainY(_price);
       if (ys.isEmpty) {
-        _min = _offY;
-        _max = _offY;
+        _min = _price;
+        _max = _price;
       } else {
         //真实的min Max
         _min = _rys.reduce(min);
         _max = _rys.reduce(max);
         if (_price >= _max) {
-          _offY = max(_offY, ys.reduce(min) + _height); //最少要比最小值大一个区间
+          _offY = min(_offY, ys.reduce(max) - 50); //最少要比最小值大一个区间
         } else if (_price <= _min) {
-          _offY = min(_offY, ys.reduce(max) - _height); //最多要比最大值小一个区间
+          _offY = max(_offY, ys.reduce(min) + 50); //最多要比最大值小一个区间
         }
       }
-      print("$i=>_yy:$_offY min$_min max:$_max");
+      print("$i=>_yy:$_offY  pri:$_price min$_min max:$_max");
       _offY = _offY.clamp(baseTop, baseBottom);
       // print("_yy:$_yy");
       ys.add(_offY); //转换后的坐标
