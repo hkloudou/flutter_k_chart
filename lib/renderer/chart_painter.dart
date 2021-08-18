@@ -423,7 +423,7 @@ class ChartPainter extends BaseChartPainter {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     KLineEntity point = datas.last;
     var price = order.price;
-    var text = "持仓价：" + format(price);
+    var text = "持仓价：${format(price)} [${order.timeRemain}]";
     TextPainter tp =
         getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
     double y = getMainY(price);
