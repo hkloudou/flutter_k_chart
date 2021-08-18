@@ -433,6 +433,7 @@ class ChartPainter extends BaseChartPainter {
       Canvas canvas, Size size, KChartOrders order, double pos) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     const _orderBadgeWidth = 30.0;
+    const _orderBadgeSpace = 20;
     KLineEntity point = datas.last;
     var price = order.price;
     var text = format(price);
@@ -451,10 +452,10 @@ class ChartPainter extends BaseChartPainter {
 
     if (price > mMainMaxValue) {
       y = getMainY(mMainMaxValue);
-      y = y + (pos * 15);
+      y = y + (pos * _orderBadgeSpace);
     } else if (price < mMainMinValue) {
       y = getMainY(mMainMinValue);
-      y = y + (pos * 15);
+      y = y + (pos * _orderBadgeSpace);
     }
 
     //画价格背景
