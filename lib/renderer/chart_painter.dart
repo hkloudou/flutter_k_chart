@@ -421,6 +421,7 @@ class ChartPainter extends BaseChartPainter {
 
   void drawOrdersLine(Canvas canvas, Size size, KChartOrders order) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
+    const _orderBadgeWidth = 30.0;
     KLineEntity point = datas.last;
     var price = order.price;
     var text = format(price);
@@ -446,7 +447,7 @@ class ChartPainter extends BaseChartPainter {
     //画价格背景
     double left =
         mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
-    left = order.useTimeRemain ? 50 : 0;
+    left = order.useTimeRemain ? _orderBadgeWidth : 0;
     double top = y - tp.height / 2 - padding;
     //加上三角形的宽以及padding
     double right = left + tp.width + padding * 2 + padding;
@@ -457,8 +458,8 @@ class ChartPainter extends BaseChartPainter {
         Offset(startX, y),
         Offset(startX + dashWidth, y),
         realTimePaint
-          ..strokeWidth = 2
-          ..color = _color,
+          ..strokeWidth = 1
+          ..color = _color.withOpacity(0.8),
       );
       startX += space;
     }
@@ -478,25 +479,25 @@ class ChartPainter extends BaseChartPainter {
     //     realTimePaint);
 
     if (order.useTimeRemain) {
-      canvas.drawRect(Rect.fromLTRB(0, top, 50, bottom),
+      canvas.drawRect(Rect.fromLTRB(0, top, _orderBadgeWidth, bottom),
           realTimePaint..color = Colors.black);
       //画图标
-      final icon = Icons.alarm;
-      var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
-        fontFamily: icon.fontFamily,
-        fontSize: 8,
-        // height: 16,
-        textAlign: TextAlign.center,
-      ))
-        ..addText(String.fromCharCode(icon.codePoint));
-      var para = builder.build();
-      para.layout(const ui.ParagraphConstraints(width: 16));
-      canvas.drawParagraph(para, Offset(0, top));
+      // final icon = Icons.alarm;
+      // var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+      //   fontFamily: icon.fontFamily,
+      //   fontSize: 8,
+      //   // height: 16,
+      //   textAlign: TextAlign.center,
+      // ))
+      //   ..addText(String.fromCharCode(icon.codePoint));
+      // var para = builder.build();
+      // para.layout(const ui.ParagraphConstraints(width: 16));
+      // canvas.drawParagraph(para, Offset(0, top));
 
       //画倒计时
       tp =
           getTextPainter("${order.timeRemain.inSeconds}S", color: Colors.white);
-      Offset textOffset = Offset(20, y - tp.height / 2);
+      Offset textOffset = Offset(2, y - tp.height / 2);
       tp.paint(canvas, textOffset);
     }
 
