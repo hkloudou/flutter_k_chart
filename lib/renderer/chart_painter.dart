@@ -414,21 +414,23 @@ class ChartPainter extends BaseChartPainter {
             ..color = ChartColors.realTimeTextColor
             ..shader = null);
     }
-    var posUp = 0;
-    var posDown = 0;
+    var posUp = 0.00;
+    var posDown = 0.00;
     orders.forEach((order) {
       if (mMarginRight == 0 || datas.isEmpty == true) return;
       KLineEntity point = datas.last;
-      drawOrdersLine(canvas, size, order);
       if (point.close > order.price) {
+        drawOrdersLine(canvas, size, order, posUp);
         posUp++;
       } else {
+        drawOrdersLine(canvas, size, order, posDown);
         posDown--;
       }
     });
   }
 
-  void drawOrdersLine(Canvas canvas, Size size, KChartOrders order) {
+  void drawOrdersLine(
+      Canvas canvas, Size size, KChartOrders order, double pos) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     const _orderBadgeWidth = 30.0;
     KLineEntity point = datas.last;
