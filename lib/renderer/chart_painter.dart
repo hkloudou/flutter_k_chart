@@ -413,9 +413,27 @@ class ChartPainter extends BaseChartPainter {
             ..color = ChartColors.realTimeTextColor
             ..shader = null);
     }
+    orders.forEach((element) {
+      drawOrdersLine(canvas, size, element);
+    });
   }
 
-  void drawOrder(Canvas canvas, Size size) {}
+  void drawOrdersLine(Canvas canvas, Size size, KChartOrders order) {
+    if (mMarginRight == 0 || datas.isEmpty == true) return;
+    KLineEntity point = datas.last;
+    TextPainter tp = getTextPainter(format(order.price),
+        color: ChartColors.rightRealTimeTextColor);
+    double y = getMainY(point.close);
+    //max越往右边滑值越小
+    var max = (mTranslateX.abs() +
+            mMarginRight -
+            getMinTranslateX().abs() +
+            mPointWidth) *
+        scaleX;
+    double x = mWidth - max;
+    if (!isLine) x += mPointWidth / 2;
+  }
+
   TextPainter getTextPainter(text, {color = Colors.white}) {
     TextSpan span = TextSpan(text: "$text", style: getTextStyle(color));
     TextPainter tp = TextPainter(text: span, textDirection: TextDirection.ltr);
