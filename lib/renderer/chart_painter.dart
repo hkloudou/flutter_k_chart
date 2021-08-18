@@ -473,7 +473,7 @@ class ChartPainter extends BaseChartPainter {
     // canvas.drawRRect(
     //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
     canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
-        realTimePaint..color = _color.withOpacity(0.8));
+        realTimePaint..color = _color.withOpacity(1));
     // canvas.draw(Image.network(src), Offset(left + padding, y - tp.height / 2),
     //     realTimePaint);
 
