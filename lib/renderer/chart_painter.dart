@@ -330,10 +330,10 @@ class ChartPainter extends BaseChartPainter {
       if (yLine > posTop) {
         //超出顶部
         yRealLine = posTop;
-        posTop = posTop + 16; //顶部下移
+        // posTop = posTop + 16; //顶部下移
       } else if (yLine < posBottom) {
         yRealLine = posBottom;
-        posBottom = posBottom - 16; //底部下移
+        // posBottom = posBottom - 16; //底部下移
       }
 
       if (posTop > posMaxbottom) {
@@ -341,44 +341,12 @@ class ChartPainter extends BaseChartPainter {
       } else if (posBottom < posMinTop) {
         posBottom = posMinTop;
       }
-      print("yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop posMaxbottom:$posMaxbottom posTop:$posTop posBottom:$posBottom");
+      print("posMinTop:$posMinTop posMaxbottom:$posMaxbottom");
+      print("yLine: $yLine mMainMaxValue:$mMainMaxValue mMainMinValue:$mMainMinValue");
+      // print(
+      //     "yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop \n posMaxbottom:$posMaxbottom \n posTop:$posTop \n posBottom:$posBottom");
       drawOrdersLine(canvas, size, order, yRealLine);
     });
-    // orders.forEach((order) {
-    //   var pos = 0;
-    //   //当
-    //   double y = getMainY(point.close);
-    //   if (order.price > mMainMaxValue) {
-    //     // y = getMainY(mMainMaxValue) + (pos * (_height + 1));
-    //     // posDown--;
-    //     posTop++;
-    //     y = getMainY(mMainMaxValue) + (posTop * (16 + 1));
-    //   } else if (order.price < mMainMinValue) {
-    //     // y = getMainY(mMainMinValue) + (pos * (_height + 1));
-    //     // posUp++;
-    //     posBottom--;
-    //     y = getMainY(mMainMaxValue) + (posTop * (posBottom + 1));
-    //   }
-    //   drawOrdersLine(canvas, size, order, y);
-    // });
-
-    // double y = getMainY(point.close);
-    // 计算最大最小Y
-    // ups.forEach((order) {
-    //   if (order.price > mMainMaxValue) {
-    //     //超过了底线
-    //     posTop--;
-    //   } else if (order.price < mMainMinValue) {
-    //     posBottom++;
-    //   }
-    //   // drawOrdersLine(canvas, size, order, posUp);
-    //   // posUp--;
-    // });
-    // dns.forEach((order) {
-    //   drawOrdersLine(canvas, size, order, posDown);
-    //   posDown++;
-    // });
-
     //实时价格线
     double y = getMainY(point.close);
     TextPainter tp = getTextPainter(format(point.close),
