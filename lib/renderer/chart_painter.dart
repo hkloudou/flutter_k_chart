@@ -318,18 +318,50 @@ class ChartPainter extends BaseChartPainter {
     dns.sort((a, b) => (b.price - a.price).toInt());
     ups.sort((a, b) => (a.price - b.price).toInt());
 
+    orders.forEach((order) {});
     // var yRealLine = yLine;
     var posUp = 0;
     var posDn = 0;
+
     ups.forEach((order) {
-      if (point.close > mMainMaxValue) {
-        y = getMainY(mMainMaxValue);
-        posUp--;
-      } else if (point.close < mMainMinValue) {
-        y = getMainY(mMainMinValue);
-        posDn++;
+      double yLine = getMainY(order.price);
+      if (order.price > mMainMaxValue) {
+        yLine = getMainY(mMainMaxValue);
+      } else if (order.price < mMainMinValue) {
+        yLine = getMainY(mMainMinValue);
       }
-      drawOrdersLine(canvas, size, order, yRealLine);
+      drawOrdersLine(canvas, size, order, yLine);
+      // if (order.price > mMainMaxValue) {
+      //   yLine = getMainY(mMainMaxValue);
+      //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
+      //   posUp--;
+      // } else if (order.price < mMainMinValue) {
+      //   yLine = getMainY(mMainMinValue);
+      //   posDn++;
+      //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
+      // } else {
+      //   drawOrdersLine(canvas, size, order, yLine);
+      // }
+    });
+    dns.forEach((order) {
+      double yLine = getMainY(order.price);
+      if (order.price > mMainMaxValue) {
+        yLine = getMainY(mMainMaxValue);
+      } else if (order.price < mMainMinValue) {
+        yLine = getMainY(mMainMinValue);
+      }
+      drawOrdersLine(canvas, size, order, yLine);
+      // if (order.price > mMainMaxValue) {
+      //   yLine = getMainY(mMainMaxValue);
+      //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
+      //   posUp--;
+      // } else if (order.price < mMainMinValue) {
+      //   yLine = getMainY(mMainMinValue);
+      //   posDn++;
+      //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
+      // } else {
+      //   drawOrdersLine(canvas, size, order, yLine);
+      // }
     });
     // double yLine = getMainY(point.close);
     // if (point.close > mMainMaxValue) {
@@ -479,7 +511,7 @@ class ChartPainter extends BaseChartPainter {
   void drawOrdersLine(Canvas canvas, Size size, KChartOrder order, double y) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
 
-    const _orderBadgeSpace = 20;
+    // const _orderBadgeSpace = 20;
     KLineEntity point = datas.last;
     var price = order.price;
     // var text = format(price);
