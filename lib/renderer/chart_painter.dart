@@ -414,8 +414,17 @@ class ChartPainter extends BaseChartPainter {
             ..color = ChartColors.realTimeTextColor
             ..shader = null);
     }
-    orders.forEach((element) {
-      drawOrdersLine(canvas, size, element);
+    var posUp = 0;
+    var posDown = 0;
+    orders.forEach((order) {
+      if (mMarginRight == 0 || datas.isEmpty == true) return;
+      KLineEntity point = datas.last;
+      drawOrdersLine(canvas, size, order);
+      if (point.close > order.price) {
+        posUp++;
+      } else {
+        posDown--;
+      }
     });
   }
 
