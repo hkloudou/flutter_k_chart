@@ -448,28 +448,32 @@ class ChartPainter extends BaseChartPainter {
       drawOrdersLineItem(canvas, size, dns[i], baseBottom - i * _height);
     }
     List<double> ys = [];
+    List<double> _rys = [];
 
     var _min = 0.0;
     var _max = 0.0;
     for (var i = 0; i < nms.length; i++) {
       var _yy = getMainY(nms[i].price);
-      print("nms[i].price:${nms[i].price},yy:$_yy");
+      // _rys.add(_yy); //真实价格列表
+      // print("nms[i].price:${nms[i].price},yy:$_yy");
       if (ys.isEmpty) {
         _min = _yy;
         _max = _yy;
       } else {
-        _min = ys.reduce(min);
-        _max = ys.reduce(max);
+        //真实的min Max
+        _min = _rys.reduce(min);
+        _max = _rys.reduce(max);
         if (_yy >= _max) {
-          _yy = max(_yy, _min + _height); //最少要比最小值大一个区间
+          _yy = max(_yy, ys.reduce(min) + _height); //最少要比最小值大一个区间
         } else if (_yy <= _min) {
-          _yy = min(_yy, _max - _height); //最多要比最大值小一个区间
+          _yy = min(_yy, ys.reduce(max) - _height); //最多要比最大值小一个区间
         }
       }
       print("$i=>_yy:$_yy min$_min max:$_max");
       _yy = _yy.clamp(baseTop, baseBottom);
       // print("_yy:$_yy");
-      ys.add(_yy);
+      ys.add(_yy); //转换后的坐标
+      _rys.add(nms[i].price); //真实价格
 
       drawOrdersLineItem(canvas, size, nms[i], _yy);
     }
