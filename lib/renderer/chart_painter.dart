@@ -346,6 +346,7 @@ class ChartPainter extends BaseChartPainter {
       } else if (posBottom < posMinTop) {
         posBottom = posMinTop;
       }
+      // yRealLine = yRealLine.clamp(posTop, posBottom);
       // print("posMinTop:$posMinTop posMaxbottom:$posMaxbottom");
       // print("yLine: $yLine mMainMaxValue:$mMainMaxValue mMainMinValue:$mMainMinValue");
       print("yRealLine:$yRealLine posTop:$posTop posMinTop:$posMinTop");
