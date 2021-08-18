@@ -311,6 +311,24 @@ class ChartPainter extends BaseChartPainter {
   void drawRealTimePrice(Canvas canvas, Size size) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     KLineEntity point = datas.last;
+
+    //实时订单
+    var ups = orders.where((order) => point.close >= order.price).toList();
+    var dns = orders.where((order) => point.close < order.price).toList();
+    dns.sort((a, b) => (b.price - a.price).toInt());
+    ups.sort((a, b) => (a.price - b.price).toInt());
+    var posUp = 0.00;
+    var posDown = 0.00;
+    ups.forEach((order) {
+      drawOrdersLine(canvas, size, order, posUp);
+      posUp--;
+    });
+    dns.forEach((order) {
+      drawOrdersLine(canvas, size, order, posDown);
+      posDown++;
+    });
+
+    //实时价格线
     TextPainter tp = getTextPainter(format(point.close),
         color: ChartColors.rightRealTimeTextColor);
     double y = getMainY(point.close);
@@ -414,20 +432,6 @@ class ChartPainter extends BaseChartPainter {
             ..color = ChartColors.realTimeTextColor
             ..shader = null);
     }
-    orders.sort((a, b) => (b.price - a.price).toInt());
-    var posUp = 0.00;
-    var posDown = 0.00;
-    orders.forEach((order) {
-      if (mMarginRight == 0 || datas.isEmpty == true) return;
-      KLineEntity point = datas.last;
-      if (point.close > order.price) {
-        drawOrdersLine(canvas, size, order, posUp);
-        posUp--;
-      } else {
-        drawOrdersLine(canvas, size, order, posDown);
-        posDown++;
-      }
-    });
   }
 
   void drawOrdersLine(
@@ -495,7 +499,7 @@ class ChartPainter extends BaseChartPainter {
 
     if (order.useTimeRemain) {
       canvas.drawRect(Rect.fromLTRB(0, top, _orderBadgeWidth, bottom),
-          realTimePaint..color = Colors.black);
+          realTimePaint..color = Colors.black87);
       //画图标
       // final icon = Icons.alarm;
       // var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
