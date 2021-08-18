@@ -478,13 +478,15 @@ class ChartPainter extends BaseChartPainter {
     //     realTimePaint);
 
     if (order.useTimeRemain) {
-      canvas.drawRect(
-          Rect.fromLTRB(0, top, 50, bottom), realTimePaint..color = _color);
+      canvas.drawRect(Rect.fromLTRB(0, top, 50, bottom),
+          realTimePaint..color = Colors.black);
       //画图标
       final icon = Icons.alarm;
       var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
         fontFamily: icon.fontFamily,
         fontSize: 8,
+        // height: 16,
+        textAlign: TextAlign.center,
       ))
         ..addText(String.fromCharCode(icon.codePoint));
       var para = builder.build();
