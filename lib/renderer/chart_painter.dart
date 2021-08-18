@@ -619,8 +619,10 @@ class ChartPainter extends BaseChartPainter {
           canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
       left = right;
     }
-    var _color =
-        point.close > price ? ChartColors.upColor : ChartColors.dnColor;
+    var _color = (point.close > price && !order.isShot) ||
+            (point.close < price && order.isShot)
+        ? ChartColors.upColor
+        : ChartColors.dnColor;
     //画价格
     {
       var text = format(price);
