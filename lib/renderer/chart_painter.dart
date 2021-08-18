@@ -324,7 +324,7 @@ class ChartPainter extends BaseChartPainter {
     var posTop = posMinTop; //顶部位置
     var posBottom = posMaxbottom; //底部位置
 
-    // print("posTop:$posTop posBottom:$posBottom");
+    // print("posMinTop:$posMinTop");
     orders.forEach((order) {
       var yRealLine = yLine;
       if (yRealLine > posTop) {
@@ -343,7 +343,7 @@ class ChartPainter extends BaseChartPainter {
       }
       // print("posMinTop:$posMinTop posMaxbottom:$posMaxbottom");
       // print("yLine: $yLine mMainMaxValue:$mMainMaxValue mMainMinValue:$mMainMinValue");
-      print("yRealLine:$yRealLine posTop:$posTop");
+      print("yRealLine:$yRealLine posTop:$posTop posMinTop:$posMinTop");
       // print(
       //     "yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop \n posMaxbottom:$posMaxbottom \n posTop:$posTop \n posBottom:$posBottom");
       drawOrdersLine(canvas, size, order, yRealLine);
