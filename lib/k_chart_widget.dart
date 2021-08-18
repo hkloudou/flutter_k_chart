@@ -14,8 +14,15 @@ enum MainState { MA, BOLL, NONE }
 enum VolState { VOL, NONE }
 enum SecondaryState { MACD, KDJ, RSI, WR, NONE }
 
+class KChartOrders {
+  double price;
+  Widget? icon;
+  KChartOrders({required this.price, this.icon});
+}
+
 class KChartWidget extends StatefulWidget {
   final List<KLineEntity> datas;
+  final List<KChartOrders> orders;
   final MainState mainState;
   final VolState volState;
   final SecondaryState secondaryState;
@@ -27,6 +34,7 @@ class KChartWidget extends StatefulWidget {
     this.volState = VolState.VOL,
     this.secondaryState = SecondaryState.MACD,
     this.isLine = false,
+    this.orders = const [],
     Key? key,
     int fractionDigits = 2,
   }) : super(key: key) {
