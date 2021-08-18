@@ -324,9 +324,14 @@ class ChartPainter extends BaseChartPainter {
     var posTop = posMinTop; //顶部位置
     var posBottom = posMaxbottom; //底部位置
 
-    // print("posMinTop:$posMinTop");
     orders.forEach((order) {
+      //       if (point.close > mMainMaxValue) {
+      //   y = getMainY(mMainMaxValue);
+      // } else if (point.close < mMainMinValue) {
+      //   y = getMainY(mMainMinValue);
+      // }
       var yRealLine = yLine;
+      print("yRealLine:$yRealLine posTop:$posTop posBottom:$posBottom");
       if (yRealLine > posTop) {
         //超出顶部
         yRealLine = posTop;
@@ -467,7 +472,7 @@ class ChartPainter extends BaseChartPainter {
     //     getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
     // TextPainter tptip = getTextPainter(order.tip, color: Colors.white);
     // double y = getMainY(price);
-
+    print("y:$y");
     const _height = 16;
 
     stopAnimation();
