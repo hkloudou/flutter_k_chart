@@ -451,8 +451,10 @@ class ChartPainter extends BaseChartPainter {
 
     if (price > mMainMaxValue) {
       y = getMainY(mMainMaxValue);
+      y = y + (pos * 20);
     } else if (price < mMainMinValue) {
       y = getMainY(mMainMinValue);
+      y = y + (pos * 20);
     }
 
     //画价格背景
