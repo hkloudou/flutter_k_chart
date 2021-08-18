@@ -437,10 +437,11 @@ class ChartPainter extends BaseChartPainter {
     dns.sort((a, b) => (a.price - b.price).toInt());
     ups.sort((a, b) => (b.price - a.price).toInt());
     nms.sort((a, b) => (b.price - a.price).toInt());
+    const _height = 17;
     var baseTop = getMainY(mMainMaxValue);
     var baseBottom = getMainY(mMainMinValue);
     // print("baseTop:$baseTop");
-    const _height = 17;
+
     for (var i = 0; i < ups.length; i++) {
       drawOrdersLineItem(canvas, size, ups[i], baseTop + (i * _height));
     }
@@ -471,8 +472,8 @@ class ChartPainter extends BaseChartPainter {
           // print("新的_offY:$_offY,历史最小：${ys.reduce(min)}");
         }
       }
-      print("$i=>_yy:$_offY  pri:$_price min$_min max:$_max");
-      _offY = _offY.clamp(baseTop, double.maxFinite);
+      // print("$i=>_yy:$_offY  pri:$_price min$_min max:$_max");
+      _offY = _offY.clamp(baseTop, baseBottom);
       // print("_yy:$_yy");
       ys.add(_offY); //转换后的坐标
       _rys.add(_price); //真实价格
