@@ -436,7 +436,7 @@ class ChartPainter extends BaseChartPainter {
         .toList();
     dns.sort((a, b) => (a.price - b.price).toInt());
     ups.sort((a, b) => (b.price - a.price).toInt());
-    nms.sort((a, b) => (a.price - b.price).toInt());
+    nms.sort((a, b) => (b.price - a.price).toInt());
     var baseTop = getMainY(mMainMaxValue);
     var baseBottom = getMainY(mMainMinValue);
     // print("baseTop:$baseTop");
@@ -463,13 +463,16 @@ class ChartPainter extends BaseChartPainter {
         _min = _rys.reduce(min);
         _max = _rys.reduce(max);
         if (_price >= _max) {
-          _offY = min(_offY, ys.reduce(max) - 50); //最少要比最小值大一个区间
+          _offY = min(_offY, ys.reduce(min) - _height); //最少要比最小值大一个区间
         } else if (_price <= _min) {
-          _offY = max(_offY, ys.reduce(min) + 50); //最多要比最大值小一个区间
+          // print("价格：$_price 小于最小价格: $_min");
+          // print("旧的_offY:$_offY,历史最小：${ys.reduce(min)}");
+          _offY = max(_offY, ys.reduce(max) + _height); //最多要比最大值小一个区间
+          // print("新的_offY:$_offY,历史最小：${ys.reduce(min)}");
         }
       }
       print("$i=>_yy:$_offY  pri:$_price min$_min max:$_max");
-      _offY = _offY.clamp(baseTop, baseBottom);
+      _offY = _offY.clamp(baseTop, double.maxFinite);
       // print("_yy:$_yy");
       ys.add(_offY); //转换后的坐标
       _rys.add(_price); //真实价格
