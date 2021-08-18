@@ -421,17 +421,67 @@ class ChartPainter extends BaseChartPainter {
   void drawOrdersLine(Canvas canvas, Size size, KChartOrders order) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     KLineEntity point = datas.last;
-    TextPainter tp = getTextPainter(format(order.price),
+    var price = order.price;
+    TextPainter tp = getTextPainter(format(price),
         color: ChartColors.rightRealTimeTextColor);
-    double y = getMainY(point.close);
-    //max越往右边滑值越小
-    var max = (mTranslateX.abs() +
-            mMarginRight -
-            getMinTranslateX().abs() +
-            mPointWidth) *
-        scaleX;
-    double x = mWidth - max;
-    if (!isLine) x += mPointWidth / 2;
+    double y = getMainY(price);
+    var dashWidth = 4;
+    var dashSpace = 3;
+    const padding = 2;
+    double startX = 0;
+    final space = (dashSpace + dashWidth);
+
+    stopAnimation(); //停止一闪闪
+    startX = 0;
+    if (price > mMainMaxValue) {
+      y = getMainY(mMainMaxValue);
+    } else if (price < mMainMinValue) {
+      y = getMainY(mMainMinValue);
+    }
+    while (startX < mWidth) {
+      canvas.drawLine(Offset(startX, y), Offset(startX + dashWidth, y),
+          realTimePaint..color = ChartColors.realTimeLongLineColor);
+      startX += space;
+    }
+
+    //画价格背景
+    const triangleHeight = 8.0; //三角高度
+    const triangleWidth = 5.0; //三角宽度
+    double left =
+        mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
+    double top = y - tp.height / 2 - padding;
+    //加上三角形的宽以及padding
+    double right = left + tp.width + padding * 2 + triangleWidth + padding;
+    double bottom = top + tp.height + padding * 2;
+    // double radius = (bottom - top) / 2;
+    //画椭圆背景
+    // RRect rectBg1 =
+    //     RRect.fromLTRBR(left, top, right, bottom, Radius.circular(radius));
+    // RRect rectBg2 = RRect.fromLTRBR(left - 1, top - 1, right + 1, bottom + 1,
+    //     Radius.circular(radius + 2));
+    // canvas.drawRRect(
+    //     rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
+    // canvas.drawRRect(
+    //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
+    canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+        realTimePaint..color = ChartColors.realTimeBgColor);
+    //文字
+    tp = getTextPainter(format(price), color: ChartColors.realTimeTextColor);
+    Offset textOffset = Offset(left + padding, y - tp.height / 2);
+    tp.paint(canvas, textOffset);
+    //画三角
+    Path path = Path();
+    double dx = tp.width + textOffset.dx + padding;
+    double dy = top + (bottom - top - triangleHeight) / 2;
+    path.moveTo(dx, dy);
+    path.lineTo(dx + triangleWidth, dy + triangleHeight / 2);
+    path.lineTo(dx, dy + triangleHeight);
+    path.close();
+    canvas.drawPath(
+        path,
+        realTimePaint
+          ..color = ChartColors.realTimeTextColor
+          ..shader = null);
   }
 
   TextPainter getTextPainter(text, {color = Colors.white}) {
