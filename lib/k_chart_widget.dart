@@ -17,7 +17,14 @@ enum SecondaryState { MACD, KDJ, RSI, WR, NONE }
 class KChartOrders {
   double price;
   Widget? icon;
-  KChartOrders({required this.price, this.icon});
+  bool useTimeRemain;
+  Duration timeRemain;
+  KChartOrders({
+    required this.price,
+    this.icon,
+    this.useTimeRemain = false,
+    this.timeRemain: const Duration(seconds: 0),
+  });
 }
 
 class KChartWidget extends StatefulWidget {
