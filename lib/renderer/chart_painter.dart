@@ -11,6 +11,7 @@ import 'base_chart_renderer.dart';
 import 'main_renderer.dart';
 import 'secondary_renderer.dart';
 import 'vol_renderer.dart';
+import 'dart:ui' as ui;
 
 class ChartPainter extends BaseChartPainter {
   static get maxScrollX => BaseChartPainter.maxScrollX;
@@ -422,8 +423,9 @@ class ChartPainter extends BaseChartPainter {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     KLineEntity point = datas.last;
     var price = order.price;
-    TextPainter tp = getTextPainter(format(price),
-        color: ChartColors.rightRealTimeTextColor);
+    var text = "持仓价：" + format(price);
+    TextPainter tp =
+        getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
     double y = getMainY(price);
     var _color =
         point.close > price ? ChartColors.upColor : ChartColors.dnColor;
@@ -434,12 +436,22 @@ class ChartPainter extends BaseChartPainter {
     final space = (dashSpace + dashWidth);
 
     stopAnimation(); //停止一闪闪
-    startX = 0;
+
     if (price > mMainMaxValue) {
       y = getMainY(mMainMaxValue);
     } else if (price < mMainMinValue) {
       y = getMainY(mMainMinValue);
     }
+
+    //画价格背景
+    double left =
+        mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
+    left = 0;
+    double top = y - tp.height / 2 - padding;
+    //加上三角形的宽以及padding
+    double right = left + tp.width + padding * 2 + padding;
+    double bottom = top + tp.height + padding * 2;
+    startX = right;
     while (startX < mWidth) {
       canvas.drawLine(
         Offset(startX, y),
@@ -450,16 +462,6 @@ class ChartPainter extends BaseChartPainter {
       );
       startX += space;
     }
-
-    //画价格背景
-    const triangleHeight = 8.0; //三角高度
-    const triangleWidth = 5.0; //三角宽度
-    double left =
-        mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
-    double top = y - tp.height / 2 - padding;
-    //加上三角形的宽以及padding
-    double right = left + tp.width + padding * 2 + triangleWidth + padding;
-    double bottom = top + tp.height + padding * 2;
     // double radius = (bottom - top) / 2;
     //画椭圆背景
     // RRect rectBg1 =
@@ -470,25 +472,38 @@ class ChartPainter extends BaseChartPainter {
     //     rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
     // canvas.drawRRect(
     //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
-    canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+    canvas.drawRect(Rect.fromLTRB(left, top - 20, right, bottom),
         realTimePaint..color = _color.withOpacity(0.8));
+    // canvas.draw(Image.network(src), Offset(left + padding, y - tp.height / 2),
+    //     realTimePaint);
+    //画图标
+    final icon = Icons.alarm;
+    var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+      fontFamily: icon.fontFamily,
+      fontSize: 16,
+    ))
+      ..addText(String.fromCharCode(icon.codePoint));
+    var para = builder.build();
+    para.layout(const ui.ParagraphConstraints(width: 16));
+    canvas.drawParagraph(para, Offset(left, top - 20));
+
     //文字
-    tp = getTextPainter(format(price), color: Colors.white);
+    tp = getTextPainter(text, color: Colors.white);
     Offset textOffset = Offset(left + padding, y - tp.height / 2);
     tp.paint(canvas, textOffset);
     //画三角
-    Path path = Path();
-    double dx = tp.width + textOffset.dx + padding;
-    double dy = top + (bottom - top - triangleHeight) / 2;
-    path.moveTo(dx, dy);
-    path.lineTo(dx + triangleWidth, dy + triangleHeight / 2);
-    path.lineTo(dx, dy + triangleHeight);
-    path.close();
-    canvas.drawPath(
-        path,
-        realTimePaint
-          ..color = Colors.white
-          ..shader = null);
+    // Path path = Path();
+    // double dx = tp.width + textOffset.dx + padding;
+    // double dy = top + (bottom - top - triangleHeight) / 2;
+    // path.moveTo(dx, dy);
+    // path.lineTo(dx + triangleWidth, dy + triangleHeight / 2);
+    // path.lineTo(dx, dy + triangleHeight);
+    // path.close();
+    // canvas.drawPath(
+    //     path,
+    //     realTimePaint
+    //       ..color = Colors.white
+    //       ..shader = null);
   }
 
   TextPainter getTextPainter(text, {color = Colors.white}) {
