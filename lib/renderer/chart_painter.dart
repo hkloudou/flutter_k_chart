@@ -317,6 +317,20 @@ class ChartPainter extends BaseChartPainter {
     var dns = orders.where((order) => point.close < order.price).toList();
     dns.sort((a, b) => (b.price - a.price).toInt());
     ups.sort((a, b) => (a.price - b.price).toInt());
+
+    // var yRealLine = yLine;
+    var posUp = 0;
+    var posDn = 0;
+    ups.forEach((order) {
+      if (point.close > mMainMaxValue) {
+        y = getMainY(mMainMaxValue);
+        posUp--;
+      } else if (point.close < mMainMinValue) {
+        y = getMainY(mMainMinValue);
+        posDn++;
+      }
+      drawOrdersLine(canvas, size, order, yRealLine);
+    });
     // double yLine = getMainY(point.close);
     // if (point.close > mMainMaxValue) {
     //   yLine = getMainY(mMainMaxValue);
@@ -354,6 +368,7 @@ class ChartPainter extends BaseChartPainter {
     //   //     "yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop \n posMaxbottom:$posMaxbottom \n posTop:$posTop \n posBottom:$posBottom");
     //   drawOrdersLine(canvas, size, order, yRealLine);
     // });
+
     //实时价格线
     double y = getMainY(point.close);
     TextPainter tp = getTextPainter(format(point.close),
