@@ -423,7 +423,7 @@ class ChartPainter extends BaseChartPainter {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     KLineEntity point = datas.last;
     var price = order.price;
-    var text = "持仓价：${format(price)} [${order.timeRemain}]";
+    var text = format(price);
     TextPainter tp =
         getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
     double y = getMainY(price);
@@ -446,7 +446,7 @@ class ChartPainter extends BaseChartPainter {
     //画价格背景
     double left =
         mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
-    left = 0;
+    left = order.useTimeRemain ? 50 : 0;
     double top = y - tp.height / 2 - padding;
     //加上三角形的宽以及padding
     double right = left + tp.width + padding * 2 + padding;
@@ -472,20 +472,31 @@ class ChartPainter extends BaseChartPainter {
     //     rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
     // canvas.drawRRect(
     //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
-    canvas.drawRect(Rect.fromLTRB(left, top - 20, right, bottom),
+    canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
         realTimePaint..color = _color.withOpacity(0.8));
     // canvas.draw(Image.network(src), Offset(left + padding, y - tp.height / 2),
     //     realTimePaint);
-    //画图标
-    final icon = Icons.alarm;
-    var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
-      fontFamily: icon.fontFamily,
-      fontSize: 16,
-    ))
-      ..addText(String.fromCharCode(icon.codePoint));
-    var para = builder.build();
-    para.layout(const ui.ParagraphConstraints(width: 16));
-    canvas.drawParagraph(para, Offset(left, top - 20));
+
+    if (order.useTimeRemain) {
+      canvas.drawRect(
+          Rect.fromLTRB(0, top, 50, bottom), realTimePaint..color = _color);
+      //画图标
+      final icon = Icons.alarm;
+      var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+        fontFamily: icon.fontFamily,
+        fontSize: 8,
+      ))
+        ..addText(String.fromCharCode(icon.codePoint));
+      var para = builder.build();
+      para.layout(const ui.ParagraphConstraints(width: 16));
+      canvas.drawParagraph(para, Offset(0, top));
+
+      //画倒计时
+      tp =
+          getTextPainter("${order.timeRemain.inSeconds}S", color: Colors.white);
+      Offset textOffset = Offset(20, y - tp.height / 2);
+      tp.paint(canvas, textOffset);
+    }
 
     //文字
     tp = getTextPainter(text, color: Colors.white);
