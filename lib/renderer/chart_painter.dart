@@ -326,12 +326,13 @@ class ChartPainter extends BaseChartPainter {
 
     // print("posTop:$posTop posBottom:$posBottom");
     orders.forEach((order) {
+      var yRealLine = yLine;
       if (yLine > posTop) {
         //超出顶部
-        yLine = posTop;
+        yRealLine = posTop;
         posTop = posTop + 16; //顶部下移
       } else if (yLine < posBottom) {
-        yLine = posBottom;
+        yRealLine = posBottom;
         posBottom = posBottom - 16; //底部下移
       }
 
@@ -340,7 +341,7 @@ class ChartPainter extends BaseChartPainter {
       } else if (posBottom < posMinTop) {
         posBottom = posMinTop;
       }
-      drawOrdersLine(canvas, size, order, yLine);
+      drawOrdersLine(canvas, size, order, yRealLine);
     });
     // orders.forEach((order) {
     //   var pos = 0;
