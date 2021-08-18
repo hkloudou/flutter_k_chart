@@ -426,7 +426,7 @@ class ChartPainter extends BaseChartPainter {
         color: ChartColors.rightRealTimeTextColor);
     double y = getMainY(price);
     var dashWidth = 4;
-    var dashSpace = 3;
+    var dashSpace = 1;
     const padding = 2;
     double startX = 0;
     final space = (dashSpace + dashWidth);
@@ -439,8 +439,14 @@ class ChartPainter extends BaseChartPainter {
       y = getMainY(mMainMinValue);
     }
     while (startX < mWidth) {
-      canvas.drawLine(Offset(startX, y), Offset(startX + dashWidth, y),
-          realTimePaint..color = ChartColors.realTimeLongLineColor);
+      canvas.drawLine(
+          Offset(startX, y),
+          Offset(startX + dashWidth, y),
+          realTimePaint
+            ..strokeWidth = 2
+            ..color = (point.close > price
+                ? ChartColors.upColor
+                : ChartColors.dnColor));
       startX += space;
     }
 
