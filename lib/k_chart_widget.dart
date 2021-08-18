@@ -14,22 +14,24 @@ enum MainState { MA, BOLL, NONE }
 enum VolState { VOL, NONE }
 enum SecondaryState { MACD, KDJ, RSI, WR, NONE }
 
-class KChartOrders {
+class KChartOrder {
   double price;
   Widget? icon;
+  String tip;
   bool useTimeRemain;
   Duration timeRemain;
-  KChartOrders({
+  KChartOrder({
     required this.price,
     this.icon,
     this.useTimeRemain = false,
+    this.tip = "",
     this.timeRemain: const Duration(seconds: 0),
   });
 }
 
 class KChartWidget extends StatefulWidget {
   final List<KLineEntity> datas;
-  final List<KChartOrders> orders;
+  final List<KChartOrder> orders;
   final MainState mainState;
   final VolState volState;
   final SecondaryState secondaryState;

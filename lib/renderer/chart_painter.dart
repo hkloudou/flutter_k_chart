@@ -11,7 +11,7 @@ import 'base_chart_renderer.dart';
 import 'main_renderer.dart';
 import 'secondary_renderer.dart';
 import 'vol_renderer.dart';
-import 'dart:ui' as ui;
+// import 'dart:ui' as ui;
 
 class ChartPainter extends BaseChartPainter {
   static get maxScrollX => BaseChartPainter.maxScrollX;
@@ -19,7 +19,7 @@ class ChartPainter extends BaseChartPainter {
   BaseChartRenderer? mVolRenderer, mSecondaryRenderer;
   StreamSink<InfoWindowEntity?>? sink;
   AnimationController? controller;
-  final List<KChartOrders> orders;
+  final List<KChartOrder> orders;
   double opacity;
 
   ChartPainter(
@@ -434,84 +434,144 @@ class ChartPainter extends BaseChartPainter {
     }
   }
 
-  void drawOrdersLine(
-      Canvas canvas, Size size, KChartOrders order, double pos) {
+  void drawOrdersLine(Canvas canvas, Size size, KChartOrder order, double pos) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
-    const _orderBadgeWidth = 30.0;
+
     const _orderBadgeSpace = 20;
     KLineEntity point = datas.last;
     var price = order.price;
-    var text = format(price);
-    TextPainter tp =
-        getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
+    // var text = format(price);
+    // var tip = order.
+    // TextPainter tp =
+    //     getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
+    // TextPainter tptip = getTextPainter(order.tip, color: Colors.white);
     double y = getMainY(price);
+
+    const _height = 16;
+
+    //计算最大最小Y
+    if (price > mMainMaxValue) {
+      y = getMainY(mMainMaxValue) + (pos * _orderBadgeSpace);
+    } else if (price < mMainMinValue) {
+      y = getMainY(mMainMinValue) + (pos * _orderBadgeSpace);
+    }
+
+    stopAnimation();
+
+    double left = 0;
+    double top = y - _height / 2;
+    //加上三角形的宽以及padding
+    // double right = left + tp.width + padding * 2;
+    double right = left;
+    double bottom = top + _height;
+
+    //剩余时间提示
+    if (order.useTimeRemain) {
+      const _width = 30.0;
+      right = left + _width;
+      TextPainter tp =
+          getTextPainter("${order.timeRemain.inSeconds}S", color: Colors.white);
+      canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+          realTimePaint..color = Colors.black87);
+      tp.paint(
+          canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
+      left = right;
+    }
     var _color =
         point.close > price ? ChartColors.upColor : ChartColors.dnColor;
-    var dashWidth = 4;
-    var dashSpace = 1;
-    const padding = 2;
-    double startX = 0;
-    final space = (dashSpace + dashWidth);
+    //画价格
+    {
+      var text = format(price);
+      TextPainter tp = getTextPainter(text, color: Colors.white);
 
-    stopAnimation(); //停止一闪闪
-
-    if (price > mMainMaxValue) {
-      y = getMainY(mMainMaxValue);
-      y = y + (pos * _orderBadgeSpace);
-    } else if (price < mMainMinValue) {
-      y = getMainY(mMainMinValue);
-      y = y + (pos * _orderBadgeSpace);
+      var _width = tp.width + 10;
+      right = left + _width;
+      canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+          realTimePaint..color = _color);
+      tp.paint(
+          canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
+      left = right;
+    }
+    //画虚线
+    {
+      var dashWidth = 1;
+      var dashSpace = 2;
+      var startX = left;
+      final space = (dashSpace + dashWidth);
+      while (startX < mWidth) {
+        canvas.drawLine(
+          Offset(startX, y),
+          Offset(startX + dashWidth, y),
+          realTimePaint
+            ..strokeWidth = 1
+            ..color = _color.withOpacity(0.5),
+        );
+        startX += space;
+      }
     }
 
-    //画价格背景
-    double left =
-        mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
-    left = order.useTimeRemain ? _orderBadgeWidth : 0;
-    double top = y - tp.height / 2 - padding;
-    //加上三角形的宽以及padding
-    double right = left + tp.width + padding * 2 + padding;
-    double bottom = top + tp.height + padding * 2;
-    startX = right;
-    while (startX < mWidth) {
-      canvas.drawLine(
-        Offset(startX, y),
-        Offset(startX + dashWidth, y),
-        realTimePaint
-          ..strokeWidth = 1
-          ..color = _color.withOpacity(0.8),
-      );
-      startX += space;
-    }
-    canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
-        realTimePaint..color = _color.withOpacity(1));
+    //画价格线
 
-    if (order.useTimeRemain) {
-      canvas.drawRect(Rect.fromLTRB(0, top, _orderBadgeWidth, bottom),
-          realTimePaint..color = Colors.black87);
-      //画图标
-      // final icon = Icons.alarm;
-      // var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
-      //   fontFamily: icon.fontFamily,
-      //   fontSize: 8,
-      //   // height: 16,
-      //   textAlign: TextAlign.center,
-      // ))
-      //   ..addText(String.fromCharCode(icon.codePoint));
-      // var para = builder.build();
-      // para.layout(const ui.ParagraphConstraints(width: 16));
-      // canvas.drawParagraph(para, Offset(0, top));
+    // final space = (dashSpace + dashWidth);
 
-      //画倒计时
-      tp =
-          getTextPainter("${order.timeRemain.inSeconds}S", color: Colors.white);
-      Offset textOffset = Offset(2, y - tp.height / 2);
-      tp.paint(canvas, textOffset);
-    }
+    //停止一闪闪
 
-    //文字
-    tp = getTextPainter(text, color: Colors.white);
-    Offset textOffset = Offset(left + padding, y - tp.height / 2);
-    tp.paint(canvas, textOffset);
+    // //画价格背景
+    // double left =
+    //     mWidth - mWidth / ChartStyle.gridColumns - tp.width / 2 - padding * 2;
+    // left = order.useTimeRemain ? _orderBadgeWidth : 0;
+    // double top = y - tp.height / 2 - padding;
+    // //加上三角形的宽以及padding
+    // double right = left + tp.width + padding * 2 + padding;
+    // double bottom = top + tp.height + padding * 2;
+    // startX = right + tptip.width;
+    // while (startX < mWidth) {
+    //   canvas.drawLine(
+    //     Offset(startX, y),
+    //     Offset(startX + dashWidth, y),
+    //     realTimePaint
+    //       ..strokeWidth = 1
+    //       ..color = _color.withOpacity(0.8),
+    //   );
+    //   startX += space;
+    // }
+    // canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+    //     realTimePaint..color = _color.withOpacity(1));
+
+    // //画提示线
+    // if (order.tip.isNotEmpty) {
+    //   canvas.drawRect(Rect.fromLTRB(right, top, right + tptip.width, bottom),
+    //       realTimePaint..color = Colors.black87);
+    //   Offset textOffset = Offset(right, y - tptip.height / 2);
+    //   tptip.paint(canvas, textOffset);
+    // }
+    // if (order.useTimeRemain) {
+    //   canvas.drawRect(Rect.fromLTRB(0, top, _orderBadgeWidth, bottom),
+    //       realTimePaint..color = Colors.black87);
+    //   //画图标
+    //   // final icon = Icons.alarm;
+    //   // var builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+    //   //   fontFamily: icon.fontFamily,
+    //   //   fontSize: 8,
+    //   //   // height: 16,
+    //   //   textAlign: TextAlign.center,
+    //   // ))
+    //   //   ..addText(String.fromCharCode(icon.codePoint));
+    //   // var para = builder.build();
+    //   // para.layout(const ui.ParagraphConstraints(width: 16));
+    //   // canvas.drawParagraph(para, Offset(0, top));
+
+    //   //画倒计时
+    //   tp =
+    //       getTextPainter("${order.timeRemain.inSeconds}S", color: Colors.white);
+    //   Offset textOffset = Offset(2, y - tp.height / 2);
+    //   tp.paint(canvas, textOffset);
+    // }
+
+    // //文字
+    // tp = getTextPainter(text, color: Colors.white);
+    // Offset textOffset = Offset(left + padding, y - tp.height / 2);
+    // tp.paint(canvas, textOffset);
   }
 
   TextPainter getTextPainter(text, {color = Colors.white}) {
