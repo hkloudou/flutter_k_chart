@@ -21,6 +21,7 @@ class KChartOrder {
   Color iconBgColor;
   String tip;
   bool useTimeRemain;
+  bool isShot; //是否是看空的
   Duration timeRemain;
   TextStyle? tipStyle;
   KChartOrder({
@@ -29,6 +30,7 @@ class KChartOrder {
     this.iconStyle,
     this.iconBgColor = Colors.transparent,
     this.useTimeRemain = false,
+    this.isShot = false,
     this.tip = "",
     this.tipStyle,
     this.timeRemain: const Duration(seconds: 0),
