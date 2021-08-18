@@ -421,10 +421,10 @@ class ChartPainter extends BaseChartPainter {
       KLineEntity point = datas.last;
       if (point.close > order.price) {
         drawOrdersLine(canvas, size, order, posUp);
-        posUp++;
+        posUp--;
       } else {
         drawOrdersLine(canvas, size, order, posDown);
-        posDown--;
+        posDown++;
       }
     });
   }
