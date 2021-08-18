@@ -244,6 +244,7 @@ class _KChartWidgetState extends State<KChartWidget>
                 scrollX: mScrollX,
                 selectX: mSelectX,
                 isLongPass: isLongPress,
+                orders: widget.orders,
                 mainState: widget.mainState,
                 volState: widget.volState,
                 secondaryState: widget.secondaryState,

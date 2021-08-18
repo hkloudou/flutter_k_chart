@@ -1,6 +1,7 @@
 import 'dart:async' show StreamSink;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_k_chart/k_chart_widget.dart';
 import '../entity/k_line_entity.dart';
 import '../utils/date_format_util.dart';
 import '../entity/info_window_entity.dart';
@@ -17,6 +18,7 @@ class ChartPainter extends BaseChartPainter {
   BaseChartRenderer? mVolRenderer, mSecondaryRenderer;
   StreamSink<InfoWindowEntity?>? sink;
   AnimationController? controller;
+  final List<KChartOrders> orders;
   double opacity;
 
   ChartPainter(
@@ -25,6 +27,7 @@ class ChartPainter extends BaseChartPainter {
       required scrollX,
       required isLongPass,
       required selectX,
+      this.orders = const [],
       mainState,
       volState,
       secondaryState,
@@ -412,6 +415,7 @@ class ChartPainter extends BaseChartPainter {
     }
   }
 
+  void drawOrder(Canvas canvas, Size size) {}
   TextPainter getTextPainter(text, {color = Colors.white}) {
     TextSpan span = TextSpan(text: "$text", style: getTextStyle(color));
     TextPainter tp = TextPainter(text: span, textDirection: TextDirection.ltr);
