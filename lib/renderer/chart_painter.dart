@@ -1,4 +1,5 @@
 import 'dart:async' show StreamSink;
+// import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_k_chart/k_chart_widget.dart';
@@ -12,6 +13,7 @@ import 'main_renderer.dart';
 import 'secondary_renderer.dart';
 import 'vol_renderer.dart';
 import 'dart:ui' as ui;
+import 'dart:math';
 
 class ChartPainter extends BaseChartPainter {
   static get maxScrollX => BaseChartPainter.maxScrollX;
@@ -310,121 +312,8 @@ class ChartPainter extends BaseChartPainter {
   @override
   void drawRealTimePrice(Canvas canvas, Size size) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
+    drawOrdersLine(canvas, size);
     KLineEntity point = datas.last;
-
-    //实时订单
-    var ups =
-        orders.where((order) => order.price > mMainMaxValue).toList(); //上边界的
-    var dns =
-        orders.where((order) => order.price < mMainMinValue).toList(); //下边界
-    var nms = orders
-        .where((order) =>
-            order.price >= mMainMinValue && order.price <= mMainMaxValue)
-        .toList();
-    dns.sort((a, b) => (a.price - b.price).toInt());
-    ups.sort((a, b) => (b.price - a.price).toInt());
-    nms.sort((a, b) => (a.price - b.price).toInt());
-    var baseTop = getMainY(mMainMaxValue);
-    var baseBottom = getMainY(mMainMinValue);
-    print("baseTop:$baseTop");
-    const _height = 17;
-    for (var i = 0; i < ups.length; i++) {
-      drawOrdersLine(canvas, size, ups[i], baseTop + (i * _height));
-    }
-    for (var i = 0; i < dns.length; i++) {
-      drawOrdersLine(canvas, size, dns[i], baseBottom - i * _height);
-    }
-    List<double> ys = [];
-    for (var i = 0; i < nms.length; i++) {
-      var _yy = getMainY(nms[i].price);
-      ys.add(_yy);
-      
-      drawOrdersLine(canvas, size, nms[i], getMainY(nms[i].price));
-    }
-    // orders.forEach((order) {});
-    // var yRealLine = yLine;
-    // var posUp = 0;
-    // var posDn = 0;
-
-    // ups.forEach((order) {
-    //   double yLine = getMainY(order.price);
-    //   if (order.price > mMainMaxValue) {
-    //     yLine = getMainY(mMainMaxValue);
-    //   } else if (order.price < mMainMinValue) {
-    //     yLine = getMainY(mMainMinValue);
-    //   }
-    //   drawOrdersLine(canvas, size, order, yLine);
-    //   // if (order.price > mMainMaxValue) {
-    //   //   yLine = getMainY(mMainMaxValue);
-    //   //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
-    //   //   posUp--;
-    //   // } else if (order.price < mMainMinValue) {
-    //   //   yLine = getMainY(mMainMinValue);
-    //   //   posDn++;
-    //   //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
-    //   // } else {
-    //   //   drawOrdersLine(canvas, size, order, yLine);
-    //   // }
-    // });
-    // dns.forEach((order) {
-    //   double yLine = getMainY(order.price);
-    //   if (order.price > mMainMaxValue) {
-    //     yLine = getMainY(mMainMaxValue);
-    //   } else if (order.price < mMainMinValue) {
-    //     yLine = getMainY(mMainMinValue);
-    //   }
-    //   drawOrdersLine(canvas, size, order, yLine);
-    //   // if (order.price > mMainMaxValue) {
-    //   //   yLine = getMainY(mMainMaxValue);
-    //   //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
-    //   //   posUp--;
-    //   // } else if (order.price < mMainMinValue) {
-    //   //   yLine = getMainY(mMainMinValue);
-    //   //   posDn++;
-    //   //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
-    //   // } else {
-    //   //   drawOrdersLine(canvas, size, order, yLine);
-    //   // }
-    // });
-
-    // double yLine = getMainY(point.close);
-    // if (point.close > mMainMaxValue) {
-    //   yLine = getMainY(mMainMaxValue);
-    // } else if (point.close < mMainMinValue) {
-    //   yLine = getMainY(mMainMinValue);
-    // }
-    // var posMinTop = getMainY(mMainMaxValue); //顶部位置
-    // var posMaxbottom = getMainY(mMainMinValue); //底部位置
-
-    // var posTop = posMinTop; //顶部位置
-    // var posBottom = posMaxbottom; //底部位置
-
-    // orders.forEach((order) {
-    //   var yRealLine = yLine;
-    //   print("yRealLine:$yRealLine posTop:$posTop posBottom:$posBottom");
-    //   if (point.close > mMainMaxValue) {
-    //     //超出顶部
-    //     yRealLine = posTop;
-    //     posTop = posTop + 16; //顶部下移
-    //   } else if (point.close < mMainMinValue) {
-    //     yRealLine = posBottom;
-    //     posBottom = posBottom - 16; //底部下移
-    //   }
-
-    //   if (posTop > posMaxbottom) {
-    //     posTop = posMaxbottom;
-    //   } else if (posBottom < posMinTop) {
-    //     posBottom = posMinTop;
-    //   }
-    //   // yRealLine = yRealLine.clamp(posTop, posBottom);
-    //   // print("posMinTop:$posMinTop posMaxbottom:$posMaxbottom");
-    //   // print("yLine: $yLine mMainMaxValue:$mMainMaxValue mMainMinValue:$mMainMinValue");
-    //   print("yRealLine:$yRealLine posTop:$posTop posMinTop:$posMinTop");
-    //   // print(
-    //   //     "yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop \n posMaxbottom:$posMaxbottom \n posTop:$posTop \n posBottom:$posBottom");
-    //   drawOrdersLine(canvas, size, order, yRealLine);
-    // });
-
     //实时价格线
     double y = getMainY(point.close);
     TextPainter tp = getTextPainter(format(point.close),
@@ -532,7 +421,144 @@ class ChartPainter extends BaseChartPainter {
     }
   }
 
-  void drawOrdersLine(Canvas canvas, Size size, KChartOrder order, double y) {
+  void drawOrdersLine(Canvas canvas, Size size) {
+    if (mMarginRight == 0 || datas.isEmpty == true) return;
+    KLineEntity point = datas.last;
+
+    //实时订单
+    var ups =
+        orders.where((order) => order.price > mMainMaxValue).toList(); //上边界的
+    var dns =
+        orders.where((order) => order.price < mMainMinValue).toList(); //下边界
+    var nms = orders
+        .where((order) =>
+            order.price >= mMainMinValue && order.price <= mMainMaxValue)
+        .toList();
+    dns.sort((a, b) => (a.price - b.price).toInt());
+    ups.sort((a, b) => (b.price - a.price).toInt());
+    nms.sort((a, b) => (a.price - b.price).toInt());
+    var baseTop = getMainY(mMainMaxValue);
+    var baseBottom = getMainY(mMainMinValue);
+    // print("baseTop:$baseTop");
+    const _height = 17;
+    for (var i = 0; i < ups.length; i++) {
+      drawOrdersLineItem(canvas, size, ups[i], baseTop + (i * _height));
+    }
+    for (var i = 0; i < dns.length; i++) {
+      drawOrdersLineItem(canvas, size, dns[i], baseBottom - i * _height);
+    }
+    List<double> ys = [];
+
+    var _min = 0.0;
+    var _max = 0.0;
+    for (var i = 0; i < nms.length; i++) {
+      var _yy = getMainY(nms[i].price);
+      if (ys.isEmpty) {
+        _min = _yy;
+        _max = _yy;
+      } else {
+        _min = ys.reduce(min);
+        _max = ys.reduce(max);
+        if (_yy >= _max) {
+          _yy = max(_yy, _min + _height); //最少要比最小值大一个区间
+        } else if (_yy <= _min) {
+          _yy = min(_yy, _max - _height); //最多要比最大值小一个区间
+        }
+      }
+      print("$i=>_yy:$_yy min$_min max:$_max");
+      _yy = _yy.clamp(baseTop, baseBottom);
+      // print("_yy:$_yy");
+      ys.add(_yy);
+
+      drawOrdersLineItem(canvas, size, nms[i], _yy);
+    }
+    // orders.forEach((order) {});
+    // var yRealLine = yLine;
+    // var posUp = 0;
+    // var posDn = 0;
+
+    // ups.forEach((order) {
+    //   double yLine = getMainY(order.price);
+    //   if (order.price > mMainMaxValue) {
+    //     yLine = getMainY(mMainMaxValue);
+    //   } else if (order.price < mMainMinValue) {
+    //     yLine = getMainY(mMainMinValue);
+    //   }
+    //   drawOrdersLine(canvas, size, order, yLine);
+    //   // if (order.price > mMainMaxValue) {
+    //   //   yLine = getMainY(mMainMaxValue);
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
+    //   //   posUp--;
+    //   // } else if (order.price < mMainMinValue) {
+    //   //   yLine = getMainY(mMainMinValue);
+    //   //   posDn++;
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
+    //   // } else {
+    //   //   drawOrdersLine(canvas, size, order, yLine);
+    //   // }
+    // });
+    // dns.forEach((order) {
+    //   double yLine = getMainY(order.price);
+    //   if (order.price > mMainMaxValue) {
+    //     yLine = getMainY(mMainMaxValue);
+    //   } else if (order.price < mMainMinValue) {
+    //     yLine = getMainY(mMainMinValue);
+    //   }
+    //   drawOrdersLine(canvas, size, order, yLine);
+    //   // if (order.price > mMainMaxValue) {
+    //   //   yLine = getMainY(mMainMaxValue);
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posUp * 16));
+    //   //   posUp--;
+    //   // } else if (order.price < mMainMinValue) {
+    //   //   yLine = getMainY(mMainMinValue);
+    //   //   posDn++;
+    //   //   drawOrdersLine(canvas, size, order, yLine + (posDn * 16));
+    //   // } else {
+    //   //   drawOrdersLine(canvas, size, order, yLine);
+    //   // }
+    // });
+
+    // double yLine = getMainY(point.close);
+    // if (point.close > mMainMaxValue) {
+    //   yLine = getMainY(mMainMaxValue);
+    // } else if (point.close < mMainMinValue) {
+    //   yLine = getMainY(mMainMinValue);
+    // }
+    // var posMinTop = getMainY(mMainMaxValue); //顶部位置
+    // var posMaxbottom = getMainY(mMainMinValue); //底部位置
+
+    // var posTop = posMinTop; //顶部位置
+    // var posBottom = posMaxbottom; //底部位置
+
+    // orders.forEach((order) {
+    //   var yRealLine = yLine;
+    //   print("yRealLine:$yRealLine posTop:$posTop posBottom:$posBottom");
+    //   if (point.close > mMainMaxValue) {
+    //     //超出顶部
+    //     yRealLine = posTop;
+    //     posTop = posTop + 16; //顶部下移
+    //   } else if (point.close < mMainMinValue) {
+    //     yRealLine = posBottom;
+    //     posBottom = posBottom - 16; //底部下移
+    //   }
+
+    //   if (posTop > posMaxbottom) {
+    //     posTop = posMaxbottom;
+    //   } else if (posBottom < posMinTop) {
+    //     posBottom = posMinTop;
+    //   }
+    //   // yRealLine = yRealLine.clamp(posTop, posBottom);
+    //   // print("posMinTop:$posMinTop posMaxbottom:$posMaxbottom");
+    //   // print("yLine: $yLine mMainMaxValue:$mMainMaxValue mMainMinValue:$mMainMinValue");
+    //   print("yRealLine:$yRealLine posTop:$posTop posMinTop:$posMinTop");
+    //   // print(
+    //   //     "yRealLine:$yRealLine \n yLine:$yLine \n posMinTop:$posMinTop \n posMaxbottom:$posMaxbottom \n posTop:$posTop \n posBottom:$posBottom");
+    //   drawOrdersLine(canvas, size, order, yRealLine);
+    // });
+  }
+
+  void drawOrdersLineItem(
+      Canvas canvas, Size size, KChartOrder order, double y) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
 
     // const _orderBadgeSpace = 20;
@@ -544,7 +570,7 @@ class ChartPainter extends BaseChartPainter {
     //     getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
     // TextPainter tptip = getTextPainter(order.tip, color: Colors.white);
     // double y = getMainY(price);
-    print("y:$y");
+    // print("y:$y");
     const _height = 16;
 
     stopAnimation();
