@@ -311,27 +311,54 @@ class ChartPainter extends BaseChartPainter {
   void drawRealTimePrice(Canvas canvas, Size size) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     KLineEntity point = datas.last;
-
+    double y = getMainY(point.close);
     //实时订单
     var ups = orders.where((order) => point.close >= order.price).toList();
     var dns = orders.where((order) => point.close < order.price).toList();
     dns.sort((a, b) => (b.price - a.price).toInt());
     ups.sort((a, b) => (a.price - b.price).toInt());
-    var posUp = 0.00;
-    var posDown = 0.00;
+    var posTop = mMainMinValue; //顶部位置
+    var posBottom = mMainMaxValue; //底部位置
+
+    // orders.forEach((order) {
+    //   var pos = 0;
+    //   //当
+    //   double y = getMainY(point.close);
+    //   if (order.price > mMainMaxValue) {
+    //     // y = getMainY(mMainMaxValue) + (pos * (_height + 1));
+    //     // posDown--;
+    //     posTop++;
+    //     y = getMainY(mMainMaxValue) + (posTop * (16 + 1));
+    //   } else if (order.price < mMainMinValue) {
+    //     // y = getMainY(mMainMinValue) + (pos * (_height + 1));
+    //     // posUp++;
+    //     posBottom--;
+    //     y = getMainY(mMainMaxValue) + (posTop * (posBottom + 1));
+    //   }
+    //   drawOrdersLine(canvas, size, order, y);
+    // });
+
+    // double y = getMainY(point.close);
+    // 计算最大最小Y
     ups.forEach((order) {
-      drawOrdersLine(canvas, size, order, posUp);
-      posUp--;
+      if (order.price > mMainMaxValue) {
+        //超过了底线
+        posTop--;
+      } else if (order.price < mMainMinValue) {
+        posBottom++;
+      }
+      // drawOrdersLine(canvas, size, order, posUp);
+      // posUp--;
     });
-    dns.forEach((order) {
-      drawOrdersLine(canvas, size, order, posDown);
-      posDown++;
-    });
+    // dns.forEach((order) {
+    //   drawOrdersLine(canvas, size, order, posDown);
+    //   posDown++;
+    // });
 
     //实时价格线
     TextPainter tp = getTextPainter(format(point.close),
         color: ChartColors.rightRealTimeTextColor);
-    double y = getMainY(point.close);
+
     //max越往右边滑值越小
     var max = (mTranslateX.abs() +
             mMarginRight -
@@ -434,7 +461,7 @@ class ChartPainter extends BaseChartPainter {
     }
   }
 
-  void drawOrdersLine(Canvas canvas, Size size, KChartOrder order, double pos) {
+  void drawOrdersLine(Canvas canvas, Size size, KChartOrder order, double y) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
 
     const _orderBadgeSpace = 20;
@@ -445,16 +472,9 @@ class ChartPainter extends BaseChartPainter {
     // TextPainter tp =
     //     getTextPainter(text, color: ChartColors.rightRealTimeTextColor);
     // TextPainter tptip = getTextPainter(order.tip, color: Colors.white);
-    double y = getMainY(price);
+    // double y = getMainY(price);
 
     const _height = 16;
-
-    //计算最大最小Y
-    if (order.price > mMainMaxValue) {
-      y = getMainY(mMainMaxValue) + (pos * (_height + 1));
-    } else if (order.price < mMainMinValue) {
-      y = getMainY(mMainMinValue) + (pos * (_height + 1));
-    }
 
     stopAnimation();
 
