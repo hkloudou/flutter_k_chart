@@ -414,6 +414,7 @@ class ChartPainter extends BaseChartPainter {
             ..color = ChartColors.realTimeTextColor
             ..shader = null);
     }
+    orders.sort((a, b) => (b.price - a.price).toInt());
     var posUp = 0.00;
     var posDown = 0.00;
     orders.forEach((order) {
