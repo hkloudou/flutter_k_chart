@@ -482,20 +482,8 @@ class ChartPainter extends BaseChartPainter {
       );
       startX += space;
     }
-    // double radius = (bottom - top) / 2;
-    //画椭圆背景
-    // RRect rectBg1 =
-    //     RRect.fromLTRBR(left, top, right, bottom, Radius.circular(radius));
-    // RRect rectBg2 = RRect.fromLTRBR(left - 1, top - 1, right + 1, bottom + 1,
-    //     Radius.circular(radius + 2));
-    // canvas.drawRRect(
-    //     rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
-    // canvas.drawRRect(
-    //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
     canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
         realTimePaint..color = _color.withOpacity(1));
-    // canvas.draw(Image.network(src), Offset(left + padding, y - tp.height / 2),
-    //     realTimePaint);
 
     if (order.useTimeRemain) {
       canvas.drawRect(Rect.fromLTRB(0, top, _orderBadgeWidth, bottom),
@@ -524,19 +512,6 @@ class ChartPainter extends BaseChartPainter {
     tp = getTextPainter(text, color: Colors.white);
     Offset textOffset = Offset(left + padding, y - tp.height / 2);
     tp.paint(canvas, textOffset);
-    //画三角
-    // Path path = Path();
-    // double dx = tp.width + textOffset.dx + padding;
-    // double dy = top + (bottom - top - triangleHeight) / 2;
-    // path.moveTo(dx, dy);
-    // path.lineTo(dx + triangleWidth, dy + triangleHeight / 2);
-    // path.lineTo(dx, dy + triangleHeight);
-    // path.close();
-    // canvas.drawPath(
-    //     path,
-    //     realTimePaint
-    //       ..color = Colors.white
-    //       ..shader = null);
   }
 
   TextPainter getTextPainter(text, {color = Colors.white}) {
