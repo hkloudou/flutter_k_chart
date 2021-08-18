@@ -450,10 +450,10 @@ class ChartPainter extends BaseChartPainter {
     const _height = 16;
 
     //计算最大最小Y
-    if (price > mMainMaxValue) {
-      y = getMainY(mMainMaxValue) + (pos * _orderBadgeSpace);
-    } else if (price < mMainMinValue) {
-      y = getMainY(mMainMinValue) + (pos * _orderBadgeSpace);
+    if (order.price > mMainMaxValue) {
+      y = getMainY(mMainMaxValue);
+    } else if (order.price < mMainMinValue) {
+      y = getMainY(mMainMinValue);
     }
 
     stopAnimation();
