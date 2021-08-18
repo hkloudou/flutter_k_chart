@@ -470,8 +470,8 @@ class ChartPainter extends BaseChartPainter {
     //     rectBg2, realTimePaint..color = ChartColors.realTimeTextBorderColor);
     // canvas.drawRRect(
     //     rectBg1, realTimePaint..color = ChartColors.realTimeBgColor);
-    canvas.drawRect(
-        Rect.fromLTRB(left, top, right, bottom), realTimePaint..color = _color);
+    canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+        realTimePaint..color = _color.withOpacity(0.8));
     //文字
     tp = getTextPainter(format(price), color: Colors.white);
     Offset textOffset = Offset(left + padding, y - tp.height / 2);
