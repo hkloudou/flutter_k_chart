@@ -311,15 +311,37 @@ class ChartPainter extends BaseChartPainter {
   void drawRealTimePrice(Canvas canvas, Size size) {
     if (mMarginRight == 0 || datas.isEmpty == true) return;
     KLineEntity point = datas.last;
-    double y = getMainY(point.close);
-    //实时订单
-    var ups = orders.where((order) => point.close >= order.price).toList();
-    var dns = orders.where((order) => point.close < order.price).toList();
-    dns.sort((a, b) => (b.price - a.price).toInt());
-    ups.sort((a, b) => (a.price - b.price).toInt());
-    var posTop = mMainMinValue; //顶部位置
-    var posBottom = mMainMaxValue; //底部位置
 
+    //实时订单
+    // var ups = orders.where((order) => point.close >= order.price).toList();
+    // var dns = orders.where((order) => point.close < order.price).toList();
+    // dns.sort((a, b) => (b.price - a.price).toInt());
+    // ups.sort((a, b) => (a.price - b.price).toInt());
+    double yLine = getMainY(point.close);
+    var posMinTop = getMainY(mMainMaxValue);
+    var posMaxbottom = getMainY(mMainMinValue);
+
+    var posTop = getMainY(mMainMaxValue); //顶部位置
+    var posBottom = getMainY(mMainMinValue); //底部位置
+
+    // print("posTop:$posTop posBottom:$posBottom");
+    orders.forEach((order) {
+      if (yLine > posTop) {
+        //超出顶部
+        yLine = posTop;
+        posTop = posTop + 16; //顶部下移
+      } else if (yLine < posBottom) {
+        yLine = posBottom;
+        posBottom = posBottom - 16; //底部下移
+      }
+
+      if (posTop > posMaxbottom) {
+        posTop = posMaxbottom;
+      } else if (posBottom < posMinTop) {
+        posBottom = posMinTop;
+      }
+      drawOrdersLine(canvas, size, order, yLine);
+    });
     // orders.forEach((order) {
     //   var pos = 0;
     //   //当
@@ -340,22 +362,23 @@ class ChartPainter extends BaseChartPainter {
 
     // double y = getMainY(point.close);
     // 计算最大最小Y
-    ups.forEach((order) {
-      if (order.price > mMainMaxValue) {
-        //超过了底线
-        posTop--;
-      } else if (order.price < mMainMinValue) {
-        posBottom++;
-      }
-      // drawOrdersLine(canvas, size, order, posUp);
-      // posUp--;
-    });
+    // ups.forEach((order) {
+    //   if (order.price > mMainMaxValue) {
+    //     //超过了底线
+    //     posTop--;
+    //   } else if (order.price < mMainMinValue) {
+    //     posBottom++;
+    //   }
+    //   // drawOrdersLine(canvas, size, order, posUp);
+    //   // posUp--;
+    // });
     // dns.forEach((order) {
     //   drawOrdersLine(canvas, size, order, posDown);
     //   posDown++;
     // });
 
     //实时价格线
+    double y = getMainY(point.close);
     TextPainter tp = getTextPainter(format(point.close),
         color: ChartColors.rightRealTimeTextColor);
 
