@@ -11,7 +11,7 @@ import 'base_chart_renderer.dart';
 import 'main_renderer.dart';
 import 'secondary_renderer.dart';
 import 'vol_renderer.dart';
-// import 'dart:ui' as ui;
+import 'dart:ui' as ui;
 
 class ChartPainter extends BaseChartPainter {
   static get maxScrollX => BaseChartPainter.maxScrollX;
@@ -465,6 +465,22 @@ class ChartPainter extends BaseChartPainter {
     double right = left;
     double bottom = top + _height;
 
+    if (order.icon != null) {
+      TextPainter tp = getTextPainterStyle(
+        String.fromCharCode(order.icon!.codePoint),
+        style: TextStyle(
+          fontFamily: order.icon!.fontFamily,
+          color: Colors.black,
+        ).merge(order.iconStyle),
+      );
+      var _width = tp.width + 10;
+      right = left + _width;
+      canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
+          realTimePaint..color = order.iconBgColor);
+      tp.paint(
+          canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
+      left = right;
+    }
     //剩余时间提示
     if (order.useTimeRemain) {
       const _width = 30.0;
@@ -488,6 +504,16 @@ class ChartPainter extends BaseChartPainter {
       right = left + _width;
       canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
           realTimePaint..color = _color);
+      tp.paint(
+          canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
+      left = right;
+    }
+    //画TIP
+    if (order.tip.isNotEmpty) {
+      TextPainter tp = getTextPainterStyle(order.tip,
+          style: order.tipStyle ?? getTextStyle(_color));
+      var _width = tp.width + 10;
+      right = left + _width;
       tp.paint(
           canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
       left = right;
@@ -576,6 +602,13 @@ class ChartPainter extends BaseChartPainter {
 
   TextPainter getTextPainter(text, {color = Colors.white}) {
     TextSpan span = TextSpan(text: "$text", style: getTextStyle(color));
+    TextPainter tp = TextPainter(text: span, textDirection: TextDirection.ltr);
+    tp.layout();
+    return tp;
+  }
+
+  TextPainter getTextPainterStyle(text, {style = const TextStyle()}) {
+    TextSpan span = TextSpan(text: "$text", style: style);
     TextPainter tp = TextPainter(text: span, textDirection: TextDirection.ltr);
     tp.layout();
     return tp;

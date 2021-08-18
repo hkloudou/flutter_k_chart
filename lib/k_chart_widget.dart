@@ -16,15 +16,21 @@ enum SecondaryState { MACD, KDJ, RSI, WR, NONE }
 
 class KChartOrder {
   double price;
-  Widget? icon;
+  IconData? icon;
+  TextStyle? iconStyle;
+  Color iconBgColor;
   String tip;
   bool useTimeRemain;
   Duration timeRemain;
+  TextStyle? tipStyle;
   KChartOrder({
     required this.price,
     this.icon,
+    this.iconStyle,
+    this.iconBgColor = Colors.transparent,
     this.useTimeRemain = false,
     this.tip = "",
+    this.tipStyle,
     this.timeRemain: const Duration(seconds: 0),
   });
 }
