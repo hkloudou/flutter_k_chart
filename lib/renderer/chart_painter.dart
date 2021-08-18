@@ -451,9 +451,9 @@ class ChartPainter extends BaseChartPainter {
 
     //计算最大最小Y
     if (order.price > mMainMaxValue) {
-      y = getMainY(mMainMaxValue);
+      y = getMainY(mMainMaxValue) + (pos * (_height + 1));
     } else if (order.price < mMainMinValue) {
-      y = getMainY(mMainMinValue);
+      y = getMainY(mMainMinValue) + (pos * (_height + 1));
     }
 
     stopAnimation();
@@ -471,9 +471,10 @@ class ChartPainter extends BaseChartPainter {
         style: TextStyle(
           fontFamily: order.icon!.fontFamily,
           color: Colors.black,
+          fontSize: 12,
         ).merge(order.iconStyle),
       );
-      var _width = tp.width + 10;
+      var _width = _height;
       right = left + _width;
       canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
           realTimePaint..color = order.iconBgColor);
