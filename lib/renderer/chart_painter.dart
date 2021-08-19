@@ -618,7 +618,7 @@ class ChartPainter extends BaseChartPainter {
       TextPainter tp =
           getTextPainter("${order.timeRemain.inSeconds}S", color: _color);
       canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
-          realTimePaint..color = Colors.black87);
+          realTimePaint..color = Colors.white);
       tp.paint(
           canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
       left = right;
@@ -627,7 +627,7 @@ class ChartPainter extends BaseChartPainter {
     //画价格
     {
       var text = format(price);
-      TextPainter tp = getTextPainter(text, color: Colors.white);
+      TextPainter tp = getTextPainter(text, color: Colors.black87);
 
       var _width = tp.width + 10;
       right = left + _width;
