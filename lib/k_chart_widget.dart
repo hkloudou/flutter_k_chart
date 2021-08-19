@@ -24,6 +24,7 @@ class KChartOrder {
   bool isShot; //是否是看空的
   Duration timeRemain;
   TextStyle? tipStyle;
+
   KChartOrder({
     required this.price,
     this.icon,
@@ -44,6 +45,7 @@ class KChartWidget extends StatefulWidget {
   final VolState volState;
   final SecondaryState secondaryState;
   final bool isLine;
+  Function()? onDoubleTap;
 
   KChartWidget(
     this.datas, {
@@ -52,6 +54,7 @@ class KChartWidget extends StatefulWidget {
     this.secondaryState = SecondaryState.MACD,
     this.isLine = false,
     this.orders = const [],
+    this.onDoubleTap,
     Key? key,
     int fractionDigits = 2,
   }) : super(key: key) {
@@ -211,6 +214,8 @@ class _KChartWidgetState extends State<KChartWidget>
         // mInfoWindowStream.add(null);
         // notifyChanged();
       },
+      onDoubleTap: widget.onDoubleTap,
+      // onDoubleTap:
       // onTap: () {
       //   // isLongPress = !isLongPress;
       //   if (isLongPress) {
