@@ -589,13 +589,16 @@ class ChartPainter extends BaseChartPainter {
     // double right = left + tp.width + padding * 2;
     double right = left;
     double bottom = top + _height;
-
+    var _color = (point.close > price && !order.isShot) ||
+            (point.close < price && order.isShot)
+        ? ChartColors.upColor
+        : ChartColors.dnColor;
     if (order.icon != null) {
       TextPainter tp = getTextPainterStyle(
         String.fromCharCode(order.icon!.codePoint),
         style: TextStyle(
           fontFamily: order.icon!.fontFamily,
-          color: Colors.black,
+          color: _color,
           fontSize: 12,
         ).merge(order.iconStyle),
       );
@@ -607,22 +610,20 @@ class ChartPainter extends BaseChartPainter {
           canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
       left = right;
     }
+
     //剩余时间提示
     if (order.useTimeRemain) {
       const _width = 30.0;
       right = left + _width;
       TextPainter tp =
-          getTextPainter("${order.timeRemain.inSeconds}S", color: Colors.white);
+          getTextPainter("${order.timeRemain.inSeconds}S", color: _color);
       canvas.drawRect(Rect.fromLTRB(left, top, right, bottom),
           realTimePaint..color = Colors.black87);
       tp.paint(
           canvas, Offset(left + (_width - tp.width) / 2, y - tp.height / 2));
       left = right;
     }
-    var _color = (point.close > price && !order.isShot) ||
-            (point.close < price && order.isShot)
-        ? ChartColors.upColor
-        : ChartColors.dnColor;
+
     //画价格
     {
       var text = format(price);
